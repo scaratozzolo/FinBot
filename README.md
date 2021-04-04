@@ -41,6 +41,7 @@ Alpaca: https://alpaca.markets/
 There is also a config field called bot_char. This is the character that commands to the bot must start with for the bot to process it. The default is "?", but you can change this if you wish. 
 
 ## Current Bot Commands
+Can also use "?help".
 
 1. $<ticker> will reply with a live quote of the ticker, example $TSLA
 2. ?chart will return a chart of a given ticker
