@@ -1,5 +1,5 @@
 from config import *
-__version__ = "1.3.0b4"
+__version__ = "1.4.0"
 
 import os
 import re

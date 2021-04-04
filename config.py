@@ -5,7 +5,7 @@ botname = "FinBot" # Name of the bot as it will appear in the groupchat
 bot_char = "?" # Character to start messages that will be interpretted by the bot
 
 group_id = "" # Groupchat id 
-callback_url="" # URL that will get called every time a message is sent in the groupchat in the form of https://url.com/financialadvisors
+callback_url = "" # URL that will get called every time a message is sent in the groupchat in the form of https://url.com/financialadvisors
 # If you know how to change the route go for it. I may change this in the future, but I don't feel like updating my personal bot.
 
 # API Keys
