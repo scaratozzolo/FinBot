@@ -1,0 +1,10 @@
+flask
+pandas
+numpy
+pandas-datareader
+yfinance
+scipy
+alpaca-trade-api
+finnhub-python
+matplotlib
+GroupyAPI
