@@ -32,7 +32,9 @@ The config.py file has various bot and 3rd party api fields that allow FinBot to
 The AlphaVantage and Finnhub API keys are probably the most important right now and are the easiest to acquire. The Alpaca API keys are also easy, but require you to create a brokerage account with Alpaca. 
 
 AlphaVantage: https://www.alphavantage.co/support/#api-key
+
 Finnhub: https://finnhub.io/register
+
 Alpaca: https://alpaca.markets/
 
 
