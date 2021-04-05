@@ -1,5 +1,5 @@
 from config import *
-__version__ = "1.4.0"
+__version__ = "1.4.1"
 
 import os
 import re
@@ -40,11 +40,18 @@ for i in bot_manger.list():
 if bot is None:
     bot = bot_manger.create(botname, group_id=group_id, callback_url=callback_url)
 
+group_name = None
+groups = list(client.groups.list_all())
+for group in groups:
+    if group.id == group_id:
+        group_name = group.name
+        break
 
 
 fh_client = finnhub.Client(api_key=finnhub_api_key)
-
 alpaca_api = tradeapi.REST(alpaca_api_key, alpaca_api_secret_key, base_url='https://paper-api.alpaca.markets')
+
+
 
 app = Flask(__name__)
 
@@ -382,7 +389,7 @@ def manage_portfolio(msg):
 
         replymsg = ""
 
-        replymsg += f"Theta Xi Financial Advisors Summary\n"
+        replymsg += f"{group_name}\n"
         replymsg += f"Value: ${float(account.equity)}\n\n"
         replymsg += f"Buying Power: ${float(account.buying_power)}\nCash: ${float(account.cash)}\n\n"
         replymsg += f"Dollar Change: {round(float(account.equity)-float(account.last_equity), 2)}\nPercent Change: {round(((float(account.equity)/float(account.last_equity))-1)*100, 2)}%\n\n"
