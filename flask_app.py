@@ -1,10 +1,10 @@
 from config import *
-__version__ = "1.4.1"
+__version__ = "1.4.2"
 
 import os
 import re
 import time
-from datetime import date
+from datetime import date, timedelta
 from dateutil.relativedelta import relativedelta
 
 from flask import Flask, request
@@ -123,17 +123,23 @@ def help_msg():
 def get_quote(msg):
 
     tickers = re.findall(r"\$[a-zA-Z.]+", msg)
+    tickers = [ticker[1:].upper() for ticker in tickers]
+
+    data = yf.download(tickers, start=date.today()-timedelta(days=1))["Adj Close"]
+    quote = data.iloc[-1]
+    pchange = (data.pct_change().dropna().iloc[0]*100).round(2)
+    dchange = (data.iloc[-1] - data.iloc[0]).round(2)
 
     for ticker in tickers:
         try:
-            ticker = ticker[1:].upper()
-            res = fh_client.quote(ticker)
 
-            replymsg = f"{yf.Ticker(ticker).info['shortName']} Quote:\nPrice: ${round(res['c'], 2)}\nDollar Change: {round(res['c']-res['pc'], 2)}\n% Change: {round(((res['c']/res['pc'])-1)*100, 2)}%"
+            replymsg = f"{yf.Ticker(ticker).info['shortName']} Quote:\nPrice: ${quote[ticker]}\nDollar Change: {dchange[ticker]}\n% Change: {pchange[ticker]}%"
             bot.post(replymsg)
+
+
+
         except Exception as e:
-            # print(e)
-            pass
+            print(e)
 
 
 
