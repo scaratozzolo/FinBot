@@ -1,5 +1,5 @@
 from config import *
-__version__ = "1.4.3"
+__version__ = "1.4.4"
 
 import os
 import re
@@ -122,7 +122,7 @@ def help_msg():
 
 def get_quote(msg):
 
-    tickers = re.findall(r"\$[a-zA-Z.]+", msg)
+    tickers = re.findall(r"\$[a-zA-Z.]+-?[a-zA-Z.]*", msg)
     tickers = [ticker[1:].upper() for ticker in tickers]
 
     data = yf.download(tickers, start=date.today()-timedelta(days=1))["Adj Close"]
