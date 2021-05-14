@@ -1,5 +1,5 @@
 from config import *
-__version__ = "1.4.2"
+__version__ = "1.4.3"
 
 import os
 import re
@@ -126,20 +126,22 @@ def get_quote(msg):
     tickers = [ticker[1:].upper() for ticker in tickers]
 
     data = yf.download(tickers, start=date.today()-timedelta(days=1))["Adj Close"]
-    quote = data.iloc[-1]
+    quote = data.iloc[-1].round(2)
     pchange = (data.pct_change().dropna().iloc[0]*100).round(2)
     dchange = (data.iloc[-1] - data.iloc[0]).round(2)
 
-    for ticker in tickers:
-        try:
+    if len(tickers) < 2:
+        replymsg = f"{yf.Ticker(tickers[0]).info['shortName']} Quote:\nPrice: ${quote}\nDollar Change: {dchange}\n% Change: {pchange}%"
+        bot.post(replymsg)
+    else:
+        for ticker in tickers:
+            try:
 
-            replymsg = f"{yf.Ticker(ticker).info['shortName']} Quote:\nPrice: ${quote[ticker]}\nDollar Change: {dchange[ticker]}\n% Change: {pchange[ticker]}%"
-            bot.post(replymsg)
+                replymsg = f"{yf.Ticker(ticker).info['shortName']} Quote:\nPrice: ${quote[ticker]}\nDollar Change: {dchange[ticker]}\n% Change: {pchange[ticker]}%"
+                bot.post(replymsg)
 
-
-
-        except Exception as e:
-            print(e)
+            except Exception as e:
+                print(e)
 
 
 
