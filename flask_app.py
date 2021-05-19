@@ -1,5 +1,5 @@
 from config import *
-__version__ = "1.4.4"
+__version__ = "1.4.5"
 
 import os
 import re
@@ -93,6 +93,9 @@ def financialadvisors():
 
         elif msg_split[0] == f"{bot_char}portfolio":
             manage_portfolio(msg)
+        
+        elif msg.lower().find("warren buffett") > -1:
+            warren()
 
 
         # except Exception as e:
@@ -118,6 +121,9 @@ def help_msg():
     
     bot.post(replymsg)
 
+
+def warren():
+    bot.post('"Buy the fucking dip" - Warren Buffett')
 
 
 def get_quote(msg):
