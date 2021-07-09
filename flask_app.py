@@ -137,14 +137,15 @@ def get_quote(msg):
     dchange = (data.iloc[-1] - data.iloc[0]).round(2)
 
     if len(tickers) < 2:
-        print(yf.Ticker(tickers[0]).info)
-        replymsg = f"{yf.Ticker(tickers[0]).info['shortName']} Quote:\nPrice: ${quote}\nDollar Change: {dchange}\n% Change: {pchange}%"
-        # bot.post(replymsg)
+        # replymsg = f"{yf.Ticker(tickers[0]).info['shortName']} Quote:\nPrice: ${quote}\nDollar Change: {dchange}\n% Change: {pchange}%"
+        replymsg = f"{tickers[0]} Quote:\nPrice: ${quote}\nDollar Change: {dchange}\n% Change: {pchange}%"
+        bot.post(replymsg)
     else:
         for ticker in tickers:
             try:
 
-                replymsg = f"{yf.Ticker(ticker).info['shortName']} Quote:\nPrice: ${quote[ticker]}\nDollar Change: {dchange[ticker]}\n% Change: {pchange[ticker]}%"
+                # replymsg = f"{yf.Ticker(ticker).info['shortName']} Quote:\nPrice: ${quote[ticker]}\nDollar Change: {dchange[ticker]}\n% Change: {pchange[ticker]}%"
+                replymsg = f"{ticker} Quote:\nPrice: ${quote[ticker]}\nDollar Change: {dchange[ticker]}\n% Change: {pchange[ticker]}%"
                 bot.post(replymsg)
 
             except Exception as e:
@@ -184,7 +185,8 @@ def create_chart(msg):
 
         data = pdr.get_data_yahoo(msg_split[1], start=start_date)
 
-        replymsg = f'{yf.Ticker(msg_split[1].upper()).info["shortName"]}\nDollar Change: {round(data["Adj Close"][-1] - data["Adj Close"][0], 2)}\nPercent Change: {round(((data["Adj Close"][-1] / data["Adj Close"][0])-1)*100, 2)}%'
+        # replymsg = f'{yf.Ticker(msg_split[1].upper()).info["shortName"]}\nDollar Change: {round(data["Adj Close"][-1] - data["Adj Close"][0], 2)}\nPercent Change: {round(((data["Adj Close"][-1] / data["Adj Close"][0])-1)*100, 2)}%'
+        replymsg = f'{msg_split[1].upper()}\nDollar Change: {round(data["Adj Close"][-1] - data["Adj Close"][0], 2)}\nPercent Change: {round(((data["Adj Close"][-1] / data["Adj Close"][0])-1)*100, 2)}%'
 
         data["Adj Close"].plot(title=f"{msg_split[1].upper()}, {period} {interval}").get_figure().savefig("tmp.png")
         bot.post(text=replymsg, attachments=[Images(client.session).from_file(open("tmp.png", "rb"))])
@@ -271,7 +273,10 @@ def calc_stats(msg):
         var95 = round(returns.quantile(0.05), 2)
         cvar95 = round(returns[returns.lt(var95)].mean(), 2)
 
-        replymsg = f"{yf.Ticker(ticker).info['shortName']} Historical Statistics\n"\
+        # replymsg = f"{yf.Ticker(ticker).info['shortName']} Historical Statistics\n"\
+        #            f"Mean: {mean}%\nVol: {vol}%\nVaR 95%: {var95}%\nCVaR 95: {cvar95}%"
+
+        replymsg = f"{ticker} Historical Statistics\n"\
                    f"Mean: {mean}%\nVol: {vol}%\nVaR 95%: {var95}%\nCVaR 95: {cvar95}%"
 
         returns.hist()
@@ -343,7 +348,10 @@ def monte_carlo(msg):
         high = round(max(final_prices), 2)
         low = round(min(final_prices), 2)
 
-        replymsg = f"{yf.Ticker(ticker).info['shortName']} Monte Carlo Stats\n"\
+        # replymsg = f"{yf.Ticker(ticker).info['shortName']} Monte Carlo Stats\n"\
+        #            f"Sim. Price: ${mean}\nSim. VaR 95%: {var95}%\nSim. CVaR 95: {cvar95}%\nHigh: ${high}\nLow: ${low}"
+
+        replymsg = f"{ticker} Monte Carlo Stats\n"\
                    f"Sim. Price: ${mean}\nSim. VaR 95%: {var95}%\nSim. CVaR 95: {cvar95}%\nHigh: ${high}\nLow: ${low}"
 
         plt.plot(price_list)
