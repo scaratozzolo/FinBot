@@ -139,9 +139,9 @@ def get_quote(msg):
     dchange = (data.iloc[-1] - data.iloc[0]).round(2)
 
     if len(tickers) < 2:
-        print(tickers)
-        # replymsg = f"{yf.Ticker(tickers[0]).info['shortName']} Quote:\nPrice: ${quote}\nDollar Change: {dchange}\n% Change: {pchange}%"
+        replymsg = f"{yf.Ticker(tickers[0]).info['shortName']} Quote:\nPrice: ${quote}\nDollar Change: {dchange}\n% Change: {pchange}%"
         # bot.post(replymsg)
+        print(replymsg)
     else:
         for ticker in tickers:
             try:
