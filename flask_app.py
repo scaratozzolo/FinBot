@@ -128,8 +128,6 @@ def warren():
 
 def get_quote(msg):
 
-    print(msg)
-
     tickers = re.findall(r"\$[a-zA-Z.]+-?[a-zA-Z.]*", msg)
     tickers = [ticker[1:].upper() for ticker in tickers]
 
@@ -139,9 +137,9 @@ def get_quote(msg):
     dchange = (data.iloc[-1] - data.iloc[0]).round(2)
 
     if len(tickers) < 2:
+        print(yf.Ticker(tickers[0]))
         replymsg = f"{yf.Ticker(tickers[0]).info['shortName']} Quote:\nPrice: ${quote}\nDollar Change: {dchange}\n% Change: {pchange}%"
         # bot.post(replymsg)
-        print(replymsg)
     else:
         for ticker in tickers:
             try:
