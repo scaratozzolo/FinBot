@@ -128,6 +128,8 @@ def warren():
 
 def get_quote(msg):
 
+    print(msg)
+
     tickers = re.findall(r"\$[a-zA-Z.]+-?[a-zA-Z.]*", msg)
     tickers = [ticker[1:].upper() for ticker in tickers]
 
