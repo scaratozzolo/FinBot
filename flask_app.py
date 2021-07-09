@@ -1,5 +1,5 @@
 from config import *
-__version__ = "1.4.5"
+__version__ = "1.4.6b1"
 
 import os
 import re
@@ -137,6 +137,7 @@ def get_quote(msg):
     dchange = (data.iloc[-1] - data.iloc[0]).round(2)
 
     if len(tickers) < 2:
+        print(tickers)
         replymsg = f"{yf.Ticker(tickers[0]).info['shortName']} Quote:\nPrice: ${quote}\nDollar Change: {dchange}\n% Change: {pchange}%"
         bot.post(replymsg)
     else:
@@ -437,3 +438,9 @@ def manage_portfolio(msg):
 
     else:
         bot.post(f"Usage: {bot_char}portfolio WIP\nExample: {bot_char}portfolio")
+
+
+
+# if __name__ == '__main__':
+
+#     get_quote("$tsla")
