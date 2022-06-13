@@ -74,48 +74,48 @@ def financialadvisors():
 
         time.sleep(2)
 
-        # try:
-        if msg == f"{bot_char}help":
-            logger.debug("calling help_msg")
-            help_msg()
+        try:
+            if msg == f"{bot_char}help":
+                logger.debug("calling help_msg")
+                help_msg()
 
-        elif len(re.findall(r"\$[a-zA-Z.]+", msg)) > 0:
-            logger.debug("calling get_quote")
-            get_quote(msg)
+            elif len(re.findall(r"\$[a-zA-Z.]+", msg)) > 0:
+                logger.debug("calling get_quote")
+                get_quote(msg)
 
-        elif msg_split[0] == f"{bot_char}chart":
-            logger.debug("calling create_chart")
-            create_chart(msg)
+            elif msg_split[0] == f"{bot_char}chart":
+                logger.debug("calling create_chart")
+                create_chart(msg)
 
-        elif msg_split[0] == f"{bot_char}po":
-            logger.debug("calling portfolio_opt")
-            portfolio_opt(msg)
+            elif msg_split[0] == f"{bot_char}po":
+                logger.debug("calling portfolio_opt")
+                portfolio_opt(msg)
 
-        elif msg_split[0] == f"{bot_char}stats":
-            logger.debug("calling stats")
-            calc_stats(msg)
+            elif msg_split[0] == f"{bot_char}stats":
+                logger.debug("calling stats")
+                calc_stats(msg)
 
-        elif msg_split[0] == f"{bot_char}mc":
-            logger.debug("calling monte_carlo")
-            monte_carlo(msg)
+            elif msg_split[0] == f"{bot_char}mc":
+                logger.debug("calling monte_carlo")
+                monte_carlo(msg)
 
-        elif msg_split[0] == f"{bot_char}news":
-            logger.debug("calling get_news")
-            get_news(msg)
+            elif msg_split[0] == f"{bot_char}news":
+                logger.debug("calling get_news")
+                get_news(msg)
 
-        elif msg_split[0] == f"{bot_char}portfolio":
-            logger.debug("calling portfolio")
-            manage_portfolio(msg)
-        
-        elif msg.lower().find("warren buffett") > -1:
-            logger.debug("calling warren")
-            warren()
+            elif msg_split[0] == f"{bot_char}portfolio":
+                logger.debug("calling portfolio")
+                manage_portfolio(msg)
+            
+            elif msg.lower().find("warren buffett") > -1:
+                logger.debug("calling warren")
+                warren()
 
 
-        # except Exception as e:
-        #     print(e)
-        #     # bot.post(e)
-        #     bot.post("Something went wrong. Make sure you entered the command correctly, otherwise the function is broken.")
+        except Exception as e:
+            logger.error(e)
+            # bot.post(e)
+            bot.post("Something went wrong.")
 
     return "success"
 
