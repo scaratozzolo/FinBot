@@ -49,7 +49,8 @@ for group in groups:
 
 
 fh_client = finnhub.Client(api_key=finnhub_api_key)
-alpaca_api = tradeapi.REST(alpaca_api_key, alpaca_api_secret_key, base_url='https://paper-api.alpaca.markets')
+if alpaca_api_key != "":
+    alpaca_api = tradeapi.REST(alpaca_api_key, alpaca_api_secret_key, base_url='https://paper-api.alpaca.markets')
 
 
 
