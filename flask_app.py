@@ -152,13 +152,13 @@ def get_quote(msg):
         tickers = [ticker[1:].upper() for ticker in tickers]
         logger.debug(tickers)
 
-        data = yf.download(tickers, start=date.today()-timedelta(days=1))["Adj Close"]
+        data = yf.download(tickers, start=date.today()-timedelta(days=7))["Adj Close"]
         logger.debug(len(data))
         quote = data.iloc[-1].round(2)
         logger.debug(quote)
-        pchange = (data.pct_change().dropna().iloc[0]*100).round(2)
+        pchange = (data.pct_change().dropna().iloc[-1]*100).round(2)
         logger.debug(pchange)
-        dchange = (data.iloc[-1] - data.iloc[0]).round(2)
+        dchange = (data.iloc[-1] - data.iloc[-2]).round(2)
         logger.debug(dchange)
         
         if len(tickers) < 2:
