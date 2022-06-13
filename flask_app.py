@@ -244,6 +244,8 @@ def portfolio_opt(msg):
             bot.post(f"Usage: {bot_char}po period interval opt_for comma, seperated, tickers\nExample: {bot_char}po 3 y sharpe DIS, TSLA, GOOG\nAvailable intervals: d, m, y\nAvailable optimizations: sharpe, returns, vol\nPeriod and interval is the length of the lookback data")
             return None
 
+        bot.post("Optimizing portfolio...")
+
         tickers = [i.replace(" ", "").replace(",", "").upper() for i in msg_split[4:]]
         opt = PortfolioOpt(tickers, start=start_date)
         weights = opt.optimize_portfolio(opt_for=msg_split[3], print_results=False)['x']
@@ -351,7 +353,7 @@ def monte_carlo(msg):
             return None
 
         bot.post("Calculating Monte Carlo Simulation...")
-        
+
         iterations=10000
         t_intervals=252
 
