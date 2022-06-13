@@ -183,12 +183,13 @@ def get_quote(msg):
 
 
 def create_chart(msg):
-
+    logger.debug("inside create_chart")
     msg_split = msg.split()
     if len(msg_split) != 4:
         bot.post(f"Usage: {bot_char}chart ticker period interval\nExample: {bot_char}chart TSLA 3 m\nAvailable intervals: d, m, y")
     else:
         period = int(msg_split[-2])
+        logger.debug(f"period: {period}")
         if msg_split[-1] == "d":
             start_date = str(date.today() - relativedelta(days=period))
             if period == 1:
@@ -211,15 +212,19 @@ def create_chart(msg):
             bot.post(f"Usage: {bot_char}chart ticker period interval\nExample: {bot_char}chart TSLA 3 m\nAvailable intervals: d, m, y")
             return None
 
-        data = pdr.get_data_yahoo(msg_split[1], start=start_date)
+        logger.debug(f"start_date: {start_date}")
+        data = yf.download(msg_split[1], start=start_date)
 
         # replymsg = f'{yf.Ticker(msg_split[1].upper()).info["shortName"]}\nDollar Change: {round(data["Adj Close"][-1] - data["Adj Close"][0], 2)}\nPercent Change: {round(((data["Adj Close"][-1] / data["Adj Close"][0])-1)*100, 2)}%'
         replymsg = f'{msg_split[1].upper()}\nDollar Change: {round(data["Adj Close"][-1] - data["Adj Close"][0], 2)}\nPercent Change: {round(((data["Adj Close"][-1] / data["Adj Close"][0])-1)*100, 2)}%'
 
         data["Adj Close"].plot(title=f"{msg_split[1].upper()}, {period} {interval}").get_figure().savefig("tmp.png")
+        logger.debug("chart created")
         bot.post(text=replymsg, attachments=[Images(client.session).from_file(open("tmp.png", "rb"))])
+        logger.debug("bot posted chart")
         os.remove("tmp.png")
         plt.clf()
+        logger.debug("chart removed")
 
 
 def portfolio_opt(msg):
