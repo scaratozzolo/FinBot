@@ -8,3 +8,4 @@ alpaca-trade-api
 finnhub-python
 matplotlib
 GroupyAPI
+loguru

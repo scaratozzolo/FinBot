@@ -1,4 +1,4 @@
-from config import *
+from config_test import *
 __version__ = "1.4.6b1"
 
 import os
@@ -6,6 +6,7 @@ import re
 import time
 from datetime import date, timedelta
 from dateutil.relativedelta import relativedelta
+from loguru import logger
 
 from flask import Flask, request
 
@@ -40,13 +41,15 @@ for i in bot_manger.list():
 if bot is None:
     bot = bot_manger.create(botname, group_id=group_id, callback_url=callback_url)
 
+logger.debug(bot)
+
 group_name = None
 groups = list(client.groups.list_all())
 for group in groups:
     if group.id == group_id:
         group_name = group.name
         break
-
+logger.debug(group_name)
 
 fh_client = finnhub.Client(api_key=finnhub_api_key)
 if alpaca_api_key != "":
