@@ -1,5 +1,5 @@
 from config_test import *
-__version__ = "1.4.6b1"
+__version__ = "1.5.0-beta.1"
 
 import os
 import re
@@ -70,35 +70,45 @@ def financialadvisors():
     if data['name'] != bot.name:
         msg = data['text']
         msg_split = msg.split()
+        logger.debug(msg)
 
         time.sleep(2)
 
         # try:
         if msg == f"{bot_char}help":
+            logger.debug("calling help_msg")
             help_msg()
 
         elif len(re.findall(r"\$[a-zA-Z.]+", msg)) > 0:
+            logger.debug("calling get_quote")
             get_quote(msg)
 
         elif msg_split[0] == f"{bot_char}chart":
+            logger.debug("calling create_chart")
             create_chart(msg)
 
         elif msg_split[0] == f"{bot_char}po":
+            logger.debug("calling portfolio_opt")
             portfolio_opt(msg)
 
         elif msg_split[0] == f"{bot_char}stats":
+            logger.debug("calling stats")
             calc_stats(msg)
 
         elif msg_split[0] == f"{bot_char}mc":
+            logger.debug("calling monte_carlo")
             monte_carlo(msg)
 
         elif msg_split[0] == f"{bot_char}news":
+            logger.debug("calling get_news")
             get_news(msg)
 
         elif msg_split[0] == f"{bot_char}portfolio":
+            logger.debug("calling portfolio")
             manage_portfolio(msg)
         
         elif msg.lower().find("warren buffett") > -1:
+            logger.debug("calling warren")
             warren()
 
 
@@ -113,6 +123,8 @@ def financialadvisors():
 
 def help_msg():
 
+    logger.debug("inside help_msg")
+
     replymsg = f"FinBot v{__version__} Help\n"
     replymsg += "1. $<ticker> will reply with a live quote of the ticker, example $TSLA\n"
     replymsg += f"2. {bot_char}chart will return a chart of a given ticker\n"
@@ -124,26 +136,35 @@ def help_msg():
 
     
     bot.post(replymsg)
+    logger.debug("bot posted help")
 
 
 def warren():
     bot.post('"Buy the fucking dip" - Warren Buffett')
+    logger.debug("bot posted warren")
 
 
 def get_quote(msg):
+    logger.debug("inside get_quote")
 
     tickers = re.findall(r"\$[a-zA-Z.]+-?[a-zA-Z.]*", msg)
     tickers = [ticker[1:].upper() for ticker in tickers]
+    logger.debug(tickers)
 
     data = yf.download(tickers, start=date.today()-timedelta(days=1))["Adj Close"]
+    logger.debug(len(data))
     quote = data.iloc[-1].round(2)
+    logger.debug(quote)
     pchange = (data.pct_change().dropna().iloc[0]*100).round(2)
+    logger.debug(pchange)
     dchange = (data.iloc[-1] - data.iloc[0]).round(2)
-
+    logger.debug(dchange)
+    
     if len(tickers) < 2:
         # replymsg = f"{yf.Ticker(tickers[0]).info['shortName']} Quote:\nPrice: ${quote}\nDollar Change: {dchange}\n% Change: {pchange}%"
         replymsg = f"{tickers[0]} Quote:\nPrice: ${quote}\nDollar Change: {dchange}\n% Change: {pchange}%"
         bot.post(replymsg)
+        logger.debug("bot posted quote for single ticker")
     else:
         for ticker in tickers:
             try:
@@ -151,11 +172,11 @@ def get_quote(msg):
                 # replymsg = f"{yf.Ticker(ticker).info['shortName']} Quote:\nPrice: ${quote[ticker]}\nDollar Change: {dchange[ticker]}\n% Change: {pchange[ticker]}%"
                 replymsg = f"{ticker} Quote:\nPrice: ${quote[ticker]}\nDollar Change: {dchange[ticker]}\n% Change: {pchange[ticker]}%"
                 bot.post(replymsg)
-
+                logger.debug(f"bot posted quote for {ticker}")
             except Exception as e:
-                print(e)
+                logger.error(e)
 
-
+    logger.debug("get_quote finished")
 
 
 def create_chart(msg):
