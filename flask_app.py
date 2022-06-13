@@ -147,36 +147,39 @@ def warren():
 def get_quote(msg):
     logger.debug("inside get_quote")
 
-    tickers = re.findall(r"\$[a-zA-Z.]+-?[a-zA-Z.]*", msg)
-    tickers = [ticker[1:].upper() for ticker in tickers]
-    logger.debug(tickers)
+    try:
+        tickers = re.findall(r"\$[a-zA-Z.]+-?[a-zA-Z.]*", msg)
+        tickers = [ticker[1:].upper() for ticker in tickers]
+        logger.debug(tickers)
 
-    data = yf.download(tickers, start=date.today()-timedelta(days=1))["Adj Close"]
-    logger.debug(len(data))
-    quote = data.iloc[-1].round(2)
-    logger.debug(quote)
-    pchange = (data.pct_change().dropna().iloc[0]*100).round(2)
-    logger.debug(pchange)
-    dchange = (data.iloc[-1] - data.iloc[0]).round(2)
-    logger.debug(dchange)
-    
-    if len(tickers) < 2:
-        # replymsg = f"{yf.Ticker(tickers[0]).info['shortName']} Quote:\nPrice: ${quote}\nDollar Change: {dchange}\n% Change: {pchange}%"
-        replymsg = f"{tickers[0]} Quote:\nPrice: ${quote}\nDollar Change: {dchange}\n% Change: {pchange}%"
-        bot.post(replymsg)
-        logger.debug("bot posted quote for single ticker")
-    else:
-        for ticker in tickers:
-            try:
+        data = yf.download(tickers, start=date.today()-timedelta(days=1))["Adj Close"]
+        logger.debug(len(data))
+        quote = data.iloc[-1].round(2)
+        logger.debug(quote)
+        pchange = (data.pct_change().dropna().iloc[0]*100).round(2)
+        logger.debug(pchange)
+        dchange = (data.iloc[-1] - data.iloc[0]).round(2)
+        logger.debug(dchange)
+        
+        if len(tickers) < 2:
+            # replymsg = f"{yf.Ticker(tickers[0]).info['shortName']} Quote:\nPrice: ${quote}\nDollar Change: {dchange}\n% Change: {pchange}%"
+            replymsg = f"{tickers[0]} Quote:\nPrice: ${quote}\nDollar Change: {dchange}\n% Change: {pchange}%"
+            bot.post(replymsg)
+            logger.debug("bot posted quote for single ticker")
+        else:
+            for ticker in tickers:
+                try:
 
-                # replymsg = f"{yf.Ticker(ticker).info['shortName']} Quote:\nPrice: ${quote[ticker]}\nDollar Change: {dchange[ticker]}\n% Change: {pchange[ticker]}%"
-                replymsg = f"{ticker} Quote:\nPrice: ${quote[ticker]}\nDollar Change: {dchange[ticker]}\n% Change: {pchange[ticker]}%"
-                bot.post(replymsg)
-                logger.debug(f"bot posted quote for {ticker}")
-            except Exception as e:
-                logger.error(e)
+                    # replymsg = f"{yf.Ticker(ticker).info['shortName']} Quote:\nPrice: ${quote[ticker]}\nDollar Change: {dchange[ticker]}\n% Change: {pchange[ticker]}%"
+                    replymsg = f"{ticker} Quote:\nPrice: ${quote[ticker]}\nDollar Change: {dchange[ticker]}\n% Change: {pchange[ticker]}%"
+                    bot.post(replymsg)
+                    logger.debug(f"bot posted quote for {ticker}")
+                except Exception as e:
+                    logger.error(e)
 
-    logger.debug("get_quote finished")
+        logger.debug("get_quote finished")
+    except Exception as e:
+        logger.error(e)
 
 
 def create_chart(msg):
