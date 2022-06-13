@@ -125,14 +125,29 @@ def help_msg():
 
     logger.debug("inside help_msg")
 
+    i = 1
     replymsg = f"FinBot v{__version__} Help\n"
-    replymsg += "1. $<ticker> will reply with a live quote of the ticker, example $TSLA\n"
-    replymsg += f"2. {bot_char}chart will return a chart of a given ticker\n"
-    replymsg += f"3. {bot_char}po will return opimal weights for a given portfolio\n"
-    replymsg += f"4. {bot_char}stats will calculate daily historical statistics over a given time range\n"
-    replymsg += f"5. {bot_char}mc will run a Monte Carlo simulation based on data of a give time range\n"
-    replymsg += f"6. {bot_char}news will return the latest new articles for the market or a specific ticker (default is 3)\n"
-    replymsg += f"7. {bot_char}portfolio allows you to interact with the groupchat paper trading account\n"
+    replymsg += f"{i}. $<ticker> will reply with a live quote of the ticker, example $TSLA\n"
+    i+=1
+
+    replymsg += f"{i}. {bot_char}chart will return a chart of a given ticker\n"
+    i+=1
+
+    replymsg += f"{i}. {bot_char}po will return opimal weights for a given portfolio\n"
+    i+=1
+
+    replymsg += f"{i}. {bot_char}stats will calculate daily historical statistics over a given time range\n"
+    i+=1
+
+    replymsg += f"{i}. {bot_char}mc will run a Monte Carlo simulation based on data of a give time range\n"
+    i+=1
+
+    replymsg += f"{i}. {bot_char}news will return the latest new articles for the market or a specific ticker (default is 3)\n"
+    i+=1
+    
+    if alpaca_api_key != "":
+        replymsg += f"{i}. {bot_char}portfolio allows you to interact with the groupchat paper trading account\n"
+        i+=1
 
     
     bot.post(replymsg)
