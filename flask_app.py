@@ -1,11 +1,12 @@
 from config import *
-__version__ = "1.4.6b1"
+__version__ = "1.5.0"
 
 import os
 import re
 import time
 from datetime import date, timedelta
 from dateutil.relativedelta import relativedelta
+from loguru import logger
 
 from flask import Flask, request
 
@@ -40,13 +41,15 @@ for i in bot_manger.list():
 if bot is None:
     bot = bot_manger.create(botname, group_id=group_id, callback_url=callback_url)
 
+logger.debug(bot)
+
 group_name = None
 groups = list(client.groups.list_all())
 for group in groups:
     if group.id == group_id:
         group_name = group.name
         break
-
+logger.debug(group_name)
 
 fh_client = finnhub.Client(api_key=finnhub_api_key)
 if alpaca_api_key != "":
@@ -60,49 +63,59 @@ app = Flask(__name__)
 def index():
     return "Nothing to see here"
 
-@app.route('/financialadvisors', methods=['POST'])
+@app.route('/financialadvisorstest', methods=['POST'])
 def financialadvisors():
 
     data = request.get_json()
     if data['name'] != bot.name:
         msg = data['text']
         msg_split = msg.split()
+        logger.debug(msg)
 
         time.sleep(2)
 
-        # try:
-        if msg == f"{bot_char}help":
-            help_msg()
+        try:
+            if msg == f"{bot_char}help":
+                logger.debug("calling help_msg")
+                help_msg()
 
-        elif len(re.findall(r"\$[a-zA-Z.]+", msg)) > 0:
-            get_quote(msg)
+            elif len(re.findall(r"\$[a-zA-Z.]+", msg)) > 0:
+                logger.debug("calling get_quote")
+                get_quote(msg)
 
-        elif msg_split[0] == f"{bot_char}chart":
-            create_chart(msg)
+            elif msg_split[0] == f"{bot_char}chart":
+                logger.debug("calling create_chart")
+                create_chart(msg)
 
-        elif msg_split[0] == f"{bot_char}po":
-            portfolio_opt(msg)
+            elif msg_split[0] == f"{bot_char}po":
+                logger.debug("calling portfolio_opt")
+                portfolio_opt(msg)
 
-        elif msg_split[0] == f"{bot_char}stats":
-            calc_stats(msg)
+            elif msg_split[0] == f"{bot_char}stats":
+                logger.debug("calling stats")
+                calc_stats(msg)
 
-        elif msg_split[0] == f"{bot_char}mc":
-            monte_carlo(msg)
+            elif msg_split[0] == f"{bot_char}mc":
+                logger.debug("calling monte_carlo")
+                monte_carlo(msg)
 
-        elif msg_split[0] == f"{bot_char}news":
-            get_news(msg)
+            elif msg_split[0] == f"{bot_char}news":
+                logger.debug("calling get_news")
+                get_news(msg)
 
-        elif msg_split[0] == f"{bot_char}portfolio":
-            manage_portfolio(msg)
-        
-        elif msg.lower().find("warren buffett") > -1:
-            warren()
+            elif msg_split[0] == f"{bot_char}portfolio" and alpaca_api_key != "":
+                logger.debug("calling portfolio")
+                manage_portfolio(msg)
+            
+            elif msg.lower().find("warren buffett") > -1:
+                logger.debug("calling warren")
+                warren()
 
 
-        # except Exception as e:
-        #     print(e)
-        #     # bot.post(e)
-        #     bot.post("Something went wrong. Make sure you entered the command correctly, otherwise the function is broken.")
+        except Exception as e:
+            logger.error(e)
+            # bot.post(e)
+            bot.post("Something went wrong.")
 
     return "success"
 
@@ -110,58 +123,88 @@ def financialadvisors():
 
 def help_msg():
 
+    logger.debug("inside help_msg")
+
+    i = 1
     replymsg = f"FinBot v{__version__} Help\n"
-    replymsg += "1. $<ticker> will reply with a live quote of the ticker, example $TSLA\n"
-    replymsg += f"2. {bot_char}chart will return a chart of a given ticker\n"
-    replymsg += f"3. {bot_char}po will return opimal weights for a given portfolio\n"
-    replymsg += f"4. {bot_char}stats will calculate daily historical statistics over a given time range\n"
-    replymsg += f"5. {bot_char}mc will run a Monte Carlo simulation based on data of a give time range\n"
-    replymsg += f"6. {bot_char}news will return the latest new articles for the market or a specific ticker (default is 3)\n"
-    replymsg += f"7. {bot_char}portfolio allows you to interact with the groupchat paper trading account\n"
+    replymsg += f"{i}. $<ticker> will reply with a live quote of the ticker, example $TSLA\n"
+    i+=1
+
+    replymsg += f"{i}. {bot_char}chart will return a chart of a given ticker\n"
+    i+=1
+
+    replymsg += f"{i}. {bot_char}po will return opimal weights for a given portfolio\n"
+    i+=1
+
+    replymsg += f"{i}. {bot_char}stats will calculate daily historical statistics over a given time range\n"
+    i+=1
+
+    replymsg += f"{i}. {bot_char}mc will run a Monte Carlo simulation based on data of a give time range\n"
+    i+=1
+
+    replymsg += f"{i}. {bot_char}news will return the latest new articles for the market or a specific ticker (default is 3)\n"
+    i+=1
+
+    if alpaca_api_key != "":
+        replymsg += f"{i}. {bot_char}portfolio allows you to interact with the groupchat paper trading account\n"
+        i+=1
 
     
     bot.post(replymsg)
+    logger.debug("bot posted help")
 
 
 def warren():
     bot.post('"Buy the fucking dip" - Warren Buffett')
+    logger.debug("bot posted warren")
 
 
 def get_quote(msg):
+    logger.debug("inside get_quote")
 
-    tickers = re.findall(r"\$[a-zA-Z.]+-?[a-zA-Z.]*", msg)
-    tickers = [ticker[1:].upper() for ticker in tickers]
+    try:
+        tickers = re.findall(r"\$[a-zA-Z.]+-?[a-zA-Z.]*", msg)
+        tickers = [ticker[1:].upper() for ticker in tickers]
+        logger.debug(tickers)
 
-    data = yf.download(tickers, start=date.today()-timedelta(days=1))["Adj Close"]
-    quote = data.iloc[-1].round(2)
-    pchange = (data.pct_change().dropna().iloc[0]*100).round(2)
-    dchange = (data.iloc[-1] - data.iloc[0]).round(2)
+        data = yf.download(tickers, start=date.today()-timedelta(days=7))["Adj Close"]
+        logger.debug(len(data))
+        quote = data.iloc[-1].round(2)
+        logger.debug(quote)
+        pchange = (data.pct_change().dropna().iloc[-1]*100).round(2)
+        logger.debug(pchange)
+        dchange = (data.iloc[-1] - data.iloc[-2]).round(2)
+        logger.debug(dchange)
+        
+        if len(tickers) < 2:
+            # replymsg = f"{yf.Ticker(tickers[0]).info['shortName']} Quote:\nPrice: ${quote}\nDollar Change: {dchange}\n% Change: {pchange}%"
+            replymsg = f"{tickers[0]} Quote:\nPrice: ${quote}\nDollar Change: {dchange}\n% Change: {pchange}%"
+            bot.post(replymsg)
+            logger.debug("bot posted quote for single ticker")
+        else:
+            for ticker in tickers:
+                try:
 
-    if len(tickers) < 2:
-        # replymsg = f"{yf.Ticker(tickers[0]).info['shortName']} Quote:\nPrice: ${quote}\nDollar Change: {dchange}\n% Change: {pchange}%"
-        replymsg = f"{tickers[0]} Quote:\nPrice: ${quote}\nDollar Change: {dchange}\n% Change: {pchange}%"
-        bot.post(replymsg)
-    else:
-        for ticker in tickers:
-            try:
+                    # replymsg = f"{yf.Ticker(ticker).info['shortName']} Quote:\nPrice: ${quote[ticker]}\nDollar Change: {dchange[ticker]}\n% Change: {pchange[ticker]}%"
+                    replymsg = f"{ticker} Quote:\nPrice: ${quote[ticker]}\nDollar Change: {dchange[ticker]}\n% Change: {pchange[ticker]}%"
+                    bot.post(replymsg)
+                    logger.debug(f"bot posted quote for {ticker}")
+                except Exception as e:
+                    logger.error(e)
 
-                # replymsg = f"{yf.Ticker(ticker).info['shortName']} Quote:\nPrice: ${quote[ticker]}\nDollar Change: {dchange[ticker]}\n% Change: {pchange[ticker]}%"
-                replymsg = f"{ticker} Quote:\nPrice: ${quote[ticker]}\nDollar Change: {dchange[ticker]}\n% Change: {pchange[ticker]}%"
-                bot.post(replymsg)
-
-            except Exception as e:
-                print(e)
-
-
+        logger.debug("get_quote finished")
+    except Exception as e:
+        logger.error(e)
 
 
 def create_chart(msg):
-
+    logger.debug("inside create_chart")
     msg_split = msg.split()
     if len(msg_split) != 4:
         bot.post(f"Usage: {bot_char}chart ticker period interval\nExample: {bot_char}chart TSLA 3 m\nAvailable intervals: d, m, y")
     else:
         period = int(msg_split[-2])
+        logger.debug(f"period: {period}")
         if msg_split[-1] == "d":
             start_date = str(date.today() - relativedelta(days=period))
             if period == 1:
@@ -184,15 +227,19 @@ def create_chart(msg):
             bot.post(f"Usage: {bot_char}chart ticker period interval\nExample: {bot_char}chart TSLA 3 m\nAvailable intervals: d, m, y")
             return None
 
-        data = pdr.get_data_yahoo(msg_split[1], start=start_date)
+        logger.debug(f"start_date: {start_date}")
+        data = yf.download(msg_split[1], start=start_date)
 
         # replymsg = f'{yf.Ticker(msg_split[1].upper()).info["shortName"]}\nDollar Change: {round(data["Adj Close"][-1] - data["Adj Close"][0], 2)}\nPercent Change: {round(((data["Adj Close"][-1] / data["Adj Close"][0])-1)*100, 2)}%'
         replymsg = f'{msg_split[1].upper()}\nDollar Change: {round(data["Adj Close"][-1] - data["Adj Close"][0], 2)}\nPercent Change: {round(((data["Adj Close"][-1] / data["Adj Close"][0])-1)*100, 2)}%'
 
         data["Adj Close"].plot(title=f"{msg_split[1].upper()}, {period} {interval}").get_figure().savefig("tmp.png")
+        logger.debug("chart created")
         bot.post(text=replymsg, attachments=[Images(client.session).from_file(open("tmp.png", "rb"))])
+        logger.debug("bot posted chart")
         os.remove("tmp.png")
         plt.clf()
+        logger.debug("chart removed")
 
 
 def portfolio_opt(msg):
@@ -211,6 +258,8 @@ def portfolio_opt(msg):
         else:
             bot.post(f"Usage: {bot_char}po period interval opt_for comma, seperated, tickers\nExample: {bot_char}po 3 y sharpe DIS, TSLA, GOOG\nAvailable intervals: d, m, y\nAvailable optimizations: sharpe, returns, vol\nPeriod and interval is the length of the lookback data")
             return None
+
+        bot.post("Optimizing portfolio...")
 
         tickers = [i.replace(" ", "").replace(",", "").upper() for i in msg_split[4:]]
         opt = PortfolioOpt(tickers, start=start_date)
@@ -266,7 +315,7 @@ def calc_stats(msg):
             return None
 
         ticker = msg_split[1].upper()
-        data = pdr.get_data_yahoo(ticker, start=start_date)
+        data = yf.download(ticker, start=start_date)
 
         returns = data['Adj Close'].pct_change()*100
         mean = round(returns.mean(), 2)
@@ -318,13 +367,14 @@ def monte_carlo(msg):
             bot.post(f"Usage: {bot_char}mc ticker period interval\nExample: {bot_char}mc AAPL 3 y\nAvailable intervals: d, m, y")
             return None
 
+        bot.post("Calculating Monte Carlo Simulation...")
 
         iterations=10000
         t_intervals=252
 
         ticker = msg_split[1].upper()
         data = pd.DataFrame()
-        data[ticker] = pdr.get_data_yahoo(ticker, start=start_date)['Adj Close']
+        data[ticker] = yf.download(ticker, start=start_date)['Adj Close']
 
         log_returns = np.log(1 + data.pct_change())
         u = log_returns.mean()

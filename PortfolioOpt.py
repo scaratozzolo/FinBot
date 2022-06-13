@@ -35,7 +35,7 @@ class PortfolioOpt:
         str_lengths = [len(f"{v} ({k}):") for k,v in self.tickers.items()]
         self.max_str = max(str_lengths) + 1
 
-        self.all_data = pdr.get_data_yahoo(list(self.tickers.keys()), start=self.start, end=self.end)["Adj Close"]
+        self.all_data = yf.download(list(self.tickers.keys()), start=self.start, end=self.end)["Adj Close"]
         if self.lookahead:
             self.data = self.all_data.iloc[:-21]
             self.last_month = self.all_data.iloc[-21:]
@@ -46,7 +46,7 @@ class PortfolioOpt:
         self.ret = np.log(self.data/self.data.shift(1))
 
         self.benchmark = benchmark
-        self.bench = pdr.get_data_yahoo(self.benchmark, start=self.start, end=self.end)["Adj Close"]
+        self.bench = yf.download(self.benchmark, start=self.start, end=self.end)["Adj Close"]
         # self.bench_ret = self.bench.pct_change()
         self.bench_ret = np.log(self.bench/self.bench.shift(1))
         self.bench_ret.rename(self.benchmark, axis=1, inplace=True)
@@ -67,12 +67,12 @@ class PortfolioOpt:
         else:
             self.end = str(date.today() - timedelta(days=1))
 
-        self.data = pdr.get_data_yahoo(list(self.tickers.keys()), start=self.start, end=self.end)["Adj Close"]
+        self.data = yf.download(list(self.tickers.keys()), start=self.start, end=self.end)["Adj Close"]
         self.ret = np.log(self.data/self.data.shift(1))
         # self.ret = self.bench.pct_change()
 
 
-        self.bench = pdr.get_data_yahoo(self.benchmark, start=self.start, end=self.end)["Adj Close"]
+        self.bench = yf.download(self.benchmark, start=self.start, end=self.end)["Adj Close"]
         # self.bench_ret = self.bench.pct_change()
         self.bench_ret = np.log(self.bench/self.bench.shift(1))
         self.bench_ret.rename(self.benchmark, axis=1, inplace=True)
