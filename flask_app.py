@@ -298,7 +298,7 @@ def calc_stats(msg):
             return None
 
         ticker = msg_split[1].upper()
-        data = pdr.get_data_yahoo(ticker, start=start_date)
+        data = yf.download(ticker, start=start_date)
 
         returns = data['Adj Close'].pct_change()*100
         mean = round(returns.mean(), 2)
@@ -356,7 +356,7 @@ def monte_carlo(msg):
 
         ticker = msg_split[1].upper()
         data = pd.DataFrame()
-        data[ticker] = pdr.get_data_yahoo(ticker, start=start_date)['Adj Close']
+        data[ticker] = yf.download(ticker, start=start_date)['Adj Close']
 
         log_returns = np.log(1 + data.pct_change())
         u = log_returns.mean()
