@@ -1,5 +1,5 @@
-from config_test import *
-__version__ = "1.5.0-beta.1"
+from config import *
+__version__ = "1.5.0"
 
 import os
 import re
@@ -144,7 +144,7 @@ def help_msg():
 
     replymsg += f"{i}. {bot_char}news will return the latest new articles for the market or a specific ticker (default is 3)\n"
     i+=1
-    
+
     if alpaca_api_key != "":
         replymsg += f"{i}. {bot_char}portfolio allows you to interact with the groupchat paper trading account\n"
         i+=1
