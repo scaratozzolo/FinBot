@@ -103,7 +103,7 @@ def financialadvisors():
                 logger.debug("calling get_news")
                 get_news(msg)
 
-            elif msg_split[0] == f"{bot_char}portfolio":
+            elif msg_split[0] == f"{bot_char}portfolio" and alpaca_api_key != "":
                 logger.debug("calling portfolio")
                 manage_portfolio(msg)
             
