@@ -350,7 +350,8 @@ def monte_carlo(msg):
             bot.post(f"Usage: {bot_char}mc ticker period interval\nExample: {bot_char}mc AAPL 3 y\nAvailable intervals: d, m, y")
             return None
 
-
+        bot.post("Calculating Monte Carlo Simulation...")
+        
         iterations=10000
         t_intervals=252
 
