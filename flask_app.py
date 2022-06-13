@@ -63,7 +63,7 @@ app = Flask(__name__)
 def index():
     return "Nothing to see here"
 
-@app.route('/financialadvisorstest', methods=['POST'])
+@app.route('/financialadvisors', methods=['POST'])
 def financialadvisors():
 
     data = request.get_json()
