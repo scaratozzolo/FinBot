@@ -9,3 +9,4 @@ finnhub-python
 matplotlib
 GroupyAPI
 loguru
+Flask-APScheduler

@@ -9,6 +9,7 @@ from dateutil.relativedelta import relativedelta
 from loguru import logger
 
 from flask import Flask, request
+from flask_apscheduler import APScheduler
 
 import pandas as pd
 import numpy as np
@@ -58,6 +59,9 @@ if alpaca_api_key != "":
 
 
 app = Flask(__name__)
+scheduler = APScheduler()
+scheduler.init_app(app)
+scheduler.start()
 
 @app.route('/')
 def index():
