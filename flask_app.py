@@ -178,14 +178,14 @@ def get_quote(msg):
         
         if len(tickers) < 2:
             yf_ticker = yf.Ticker(tickers[0]).info
-            replymsg = f"{yf_ticker['longName']} Quote:\nPrice: ${quote}\nDollar Change: {dchange}\n% Change: {pchange}%"
+            replymsg = f"{yf_ticker['shortName']} Quote:\nPrice: ${quote}\nDollar Change: {dchange}\n% Change: {pchange}%"
             bot.post(replymsg)
             logger.debug("bot posted quote for single ticker")
         else:
             for ticker in tickers:
                 try:
                     yf_ticker = yf.Ticker(ticker).info
-                    replymsg = f"{yf_ticker['longName']} Quote:\nPrice: ${quote[ticker]}\nDollar Change: {dchange[ticker]}\n% Change: {pchange[ticker]}%"
+                    replymsg = f"{yf_ticker['shortName']} Quote:\nPrice: ${quote[ticker]}\nDollar Change: {dchange[ticker]}\n% Change: {pchange[ticker]}%"
                     bot.post(replymsg)
                     logger.debug(f"bot posted quote for {ticker}")
                 except Exception as e:
@@ -231,7 +231,7 @@ def create_chart(msg):
         yf_ticker = yf.Ticker(msg_split[1]).info
 
         # replymsg = f'{yf.Ticker(msg_split[1].upper()).info["shortName"]}\nDollar Change: {round(data["Adj Close"][-1] - data["Adj Close"][0], 2)}\nPercent Change: {round(((data["Adj Close"][-1] / data["Adj Close"][0])-1)*100, 2)}%'
-        replymsg = f'{yf_ticker["longName"]}\nDollar Change: {round(data["Adj Close"][-1] - data["Adj Close"][0], 2)}\nPercent Change: {round(((data["Adj Close"][-1] / data["Adj Close"][0])-1)*100, 2)}%'
+        replymsg = f'{yf_ticker["shortName"]}\nDollar Change: {round(data["Adj Close"][-1] - data["Adj Close"][0], 2)}\nPercent Change: {round(((data["Adj Close"][-1] / data["Adj Close"][0])-1)*100, 2)}%'
 
         data["Adj Close"].plot(title=f"{msg_split[1].upper()}, {period} {interval}").get_figure().savefig("tmp.png")
         logger.debug("chart created")
