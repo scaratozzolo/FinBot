@@ -1,5 +1,5 @@
 from config import *
-__version__ = "1.5.0"
+__version__ = "1.5.1"
 
 import os
 import re
@@ -9,6 +9,7 @@ from dateutil.relativedelta import relativedelta
 from loguru import logger
 
 from flask import Flask, request
+from flask_apscheduler import APScheduler
 
 import pandas as pd
 import numpy as np
@@ -58,6 +59,9 @@ if alpaca_api_key != "":
 
 
 app = Flask(__name__)
+scheduler = APScheduler()
+scheduler.init_app(app)
+scheduler.start()
 
 @app.route('/')
 def index():
@@ -79,7 +83,7 @@ def financialadvisors():
                 logger.debug("calling help_msg")
                 help_msg()
 
-            elif len(re.findall(r"\$[a-zA-Z.]+", msg)) > 0:
+            elif len(re.findall(r"\$\^?[a-zA-Z.]+", msg)) > 0:
                 logger.debug("calling get_quote")
                 get_quote(msg)
 
@@ -163,7 +167,7 @@ def get_quote(msg):
     logger.debug("inside get_quote")
 
     try:
-        tickers = re.findall(r"\$[a-zA-Z.]+-?[a-zA-Z.]*", msg)
+        tickers = re.findall(r"\$\^?[a-zA-Z.]+-?[a-zA-Z.]*", msg)
         tickers = [ticker[1:].upper() for ticker in tickers]
         logger.debug(tickers)
 
