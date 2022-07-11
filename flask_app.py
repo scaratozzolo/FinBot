@@ -59,9 +59,9 @@ if alpaca_api_key != "":
 
 
 app = Flask(__name__)
-scheduler = APScheduler()
-scheduler.init_app(app)
-scheduler.start()
+# scheduler = APScheduler()
+# scheduler.init_app(app)
+# scheduler.start()
 
 @app.route('/')
 def index():
