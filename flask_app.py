@@ -1,5 +1,5 @@
 from config import *
-__version__ = "1.5.0"
+__version__ = "1.5.1"
 
 import os
 import re
@@ -83,7 +83,7 @@ def financialadvisors():
                 logger.debug("calling help_msg")
                 help_msg()
 
-            elif len(re.findall(r"\$[a-zA-Z.]+", msg)) > 0:
+            elif len(re.findall(r"\$\^?[a-zA-Z.]+", msg)) > 0:
                 logger.debug("calling get_quote")
                 get_quote(msg)
 
@@ -167,7 +167,7 @@ def get_quote(msg):
     logger.debug("inside get_quote")
 
     try:
-        tickers = re.findall(r"\$[a-zA-Z.]+-?[a-zA-Z.]*", msg)
+        tickers = re.findall(r"\$\^?[a-zA-Z.]+-?[a-zA-Z.]*", msg)
         tickers = [ticker[1:].upper() for ticker in tickers]
         logger.debug(tickers)
 
