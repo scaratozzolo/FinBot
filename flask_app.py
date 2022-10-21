@@ -169,15 +169,20 @@ def get_quote(msg):
         logger.debug(tickers)
 
         data = yf.download(tickers, start=date.today()-timedelta(days=7))["Adj Close"]
-        logger.debug(f"df rows {len(data)}, cols {data.columns}")
-        data = data.dropna(axis=1, how="all")
-        logger.debug(f"df rows {len(data)}, cols {data.columns}")
+        print(data)
+        if type(data) == pd.DataFrame:
+            logger.debug(f"df rows {len(data)}, cols {data.columns}")
+            data = data.dropna(axis=1, how="all")
+            logger.debug(f"df rows {len(data)}, cols {data.columns}")
+        else:
+            logger.debug(f"series rows {len(data)}")
+            
         quote = data.iloc[-1].round(2)
-        logger.debug(quote)
+        logger.debug(f"{quote=}")
         pchange = (data.pct_change().dropna().iloc[-1]*100).round(2)
-        logger.debug(pchange)
+        logger.debug(f"{pchange=}")
         dchange = (data.iloc[-1] - data.iloc[-2]).round(2)
-        logger.debug(dchange)
+        logger.debug(f"{dchange=}")
         
         if len(tickers) < 2:
             yf_ticker = yf.Ticker(tickers[0]).info
@@ -506,4 +511,4 @@ def manage_portfolio(msg):
 
 if __name__ == '__main__':
 
-    get_quote("$spx $tlt")
+    get_quote("$nflx")
