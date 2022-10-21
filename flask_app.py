@@ -9,7 +9,6 @@ from dateutil.relativedelta import relativedelta
 from loguru import logger
 
 from flask import Flask, request
-from flask_apscheduler import APScheduler
 
 import pandas as pd
 import numpy as np
@@ -59,9 +58,7 @@ if alpaca_api_key != "":
 
 
 app = Flask(__name__)
-# scheduler = APScheduler()
-# scheduler.init_app(app)
-# scheduler.start()
+
 
 @app.route('/')
 def index():
@@ -172,7 +169,9 @@ def get_quote(msg):
         logger.debug(tickers)
 
         data = yf.download(tickers, start=date.today()-timedelta(days=7))["Adj Close"]
-        logger.debug(len(data))
+        logger.debug(f"df rows {len(data)}, cols {data.columns}")
+        data = data.dropna(axis=1, how="all")
+        logger.debug(f"df rows {len(data)}, cols {data.columns}")
         quote = data.iloc[-1].round(2)
         logger.debug(quote)
         pchange = (data.pct_change().dropna().iloc[-1]*100).round(2)
@@ -194,6 +193,7 @@ def get_quote(msg):
                     logger.debug(f"bot posted quote for {ticker}")
                 except Exception as e:
                     logger.error(e)
+                    bot.post(f"Error encountered for {ticker}")
 
         logger.debug("get_quote finished")
     except Exception as e:
@@ -504,6 +504,6 @@ def manage_portfolio(msg):
 
 
 
-# if __name__ == '__main__':
+if __name__ == '__main__':
 
-#     get_quote("$tsla")
+    get_quote("$spx $tlt")
