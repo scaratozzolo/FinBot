@@ -71,7 +71,10 @@ def financialadvisors():
     if data['name'] != bot.name:
         msg = data['text']
         msg_split = msg.split()
-        logger.debug(msg)
+        logger.debug(f"{msg=}")
+
+        if msg == "":
+            return "no message text"
 
         time.sleep(2)
 
