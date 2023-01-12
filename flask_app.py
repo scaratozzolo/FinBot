@@ -114,7 +114,7 @@ def financialadvisors():
 
 
         except Exception as e:
-            logger.error(e)
+            logger.exception(e)
             # bot.post(e)
             bot.post("Something went wrong.")
 
@@ -185,24 +185,34 @@ def get_quote(msg):
         logger.debug(f"{dchange=}")
         
         if len(tickers) < 2:
+            logger.debug("1 ticker")
             yf_ticker = yf.Ticker(tickers[0]).info
-            replymsg = f"{yf_ticker['shortName']} Quote:\nPrice: ${quote}\nDollar Change: {dchange}\n% Change: {pchange}%"
+            try:
+                ticker_name = yf_ticker['shortName']
+            except:
+                ticker_name = tickers[0]
+            replymsg = f"{ticker_name} Quote:\nPrice: ${quote}\nDollar Change: {dchange}\n% Change: {pchange}%"
             bot.post(replymsg)
             logger.debug("bot posted quote for single ticker")
         else:
+            logger.debug(f"{len(tickers)=}")
             for ticker in tickers:
                 try:
                     yf_ticker = yf.Ticker(ticker).info
-                    replymsg = f"{yf_ticker['shortName']} Quote:\nPrice: ${quote[ticker]}\nDollar Change: {dchange[ticker]}\n% Change: {pchange[ticker]}%"
+                    try:
+                        ticker_name = yf_ticker['shortName']
+                    except:
+                        ticker_name = ticker
+                    replymsg = f"{ticker_name} Quote:\nPrice: ${quote[ticker]}\nDollar Change: {dchange[ticker]}\n% Change: {pchange[ticker]}%"
                     bot.post(replymsg)
                     logger.debug(f"bot posted quote for {ticker}")
                 except Exception as e:
-                    logger.error(e)
+                    logger.exception(e)
                     bot.post(f"Error encountered for {ticker}")
 
         logger.debug("get_quote finished")
     except Exception as e:
-        logger.error(e)
+        logger.exception(e)
 
 
 def create_chart(msg):
