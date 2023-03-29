@@ -1,5 +1,5 @@
 from config import *
-__version__ = "1.5.1"
+__version__ = "1.6.0"
 
 import os
 import re
@@ -114,6 +114,10 @@ def financialadvisors():
             elif msg.lower().find("warren buffett") > -1:
                 logger.debug("calling warren")
                 warren()
+            
+            elif msg.lower().find("crypto check") > -1:
+                logger.debug("calling crypto check")
+                get_quote("$BTC-USD $ETH-USD $LTC-USD $DOGE-USD")
 
 
         except Exception as e:
