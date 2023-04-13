@@ -255,9 +255,13 @@ def create_chart(msg):
         logger.debug(f"start_date: {start_date}")
         data = yf.download(msg_split[1], start=start_date)
         yf_ticker = yf.Ticker(msg_split[1]).info
+        try:
+            ticker_name = yf_ticker["shortName"]
+        except KeyError:
+            ticker_name = msg_split[1]
 
         # replymsg = f'{yf.Ticker(msg_split[1].upper()).info["shortName"]}\nDollar Change: {round(data["Adj Close"][-1] - data["Adj Close"][0], 2)}\nPercent Change: {round(((data["Adj Close"][-1] / data["Adj Close"][0])-1)*100, 2)}%'
-        replymsg = f'{yf_ticker["shortName"]}\nDollar Change: {round(data["Adj Close"][-1] - data["Adj Close"][0], 2)}\nPercent Change: {round(((data["Adj Close"][-1] / data["Adj Close"][0])-1)*100, 2)}%'
+        replymsg = f'{ticker_name}\nDollar Change: {round(data["Adj Close"][-1] - data["Adj Close"][0], 2)}\nPercent Change: {round(((data["Adj Close"][-1] / data["Adj Close"][0])-1)*100, 2)}%'
 
         data["Adj Close"].plot(title=f"{msg_split[1].upper()}, {period} {interval}").get_figure().savefig("tmp.png")
         logger.debug("chart created")
