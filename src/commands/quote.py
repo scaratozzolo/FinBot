@@ -56,7 +56,7 @@ def get_quote(msg):
                     logger.debug(f"bot posted quote for {ticker}")
                 except Exception as e:
                     logger.exception(e)
-                    bot.post(f"Error encountered for {ticker}")
+                    bot.post(f"Error encountered for ${ticker}")
 
         logger.debug("get_quote finished")
     except Exception as e:
