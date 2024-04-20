@@ -1,11 +1,12 @@
+from loguru import logger
+from pydantic import BaseModel
 import pandas as pd
 import numpy as np
-import pandas_datareader as pdr
 import yfinance as yf
-yf.pdr_override()
 from scipy import optimize
 from datetime import date, timedelta
-from dateutil.relativedelta import relativedelta
+from src.constants import Intervals, OptimizeFor
+from src.models import Commands
 
 
 
@@ -102,7 +103,7 @@ class PortfolioOpt:
         return self._get_ret_vol_sr(weights)[1]
 
     def _neg_beta(self, weights, beta_vec):
-        return np.dot(beta_vec, x) * -1
+        return np.dot(beta_vec, weights) * -1
 
 
 
@@ -418,3 +419,67 @@ class PortfolioOpt:
             f.write("\n" + "#"*(self.max_str+10) + "\n")
             space = self.max_str - len("Amount needed:")
             f.write("Amount needed:" + " "*space + f"${self.amount_needed(opt_results)}\n")
+
+
+class PortfolioOptModel(BaseModel):
+
+    period: int
+    interval: Intervals
+    opt_for: OptimizeFor
+    tickers: list[str]
+
+
+def portfolio_opt(msg, bot):
+
+    msg_split = msg.split()
+    try:
+        model = PortfolioOptModel(
+            period=msg_split[1],
+            interval=msg_split[2],
+            opt_for=msg_split[3],
+            tickers=[i.replace(" ", "").replace(",", "").upper() for i in msg_split[4:]]
+        )
+        logger.debug(f"{model=}")
+    except Exception as excp:
+        logger.error(excp)
+        bot.post(Commands.PO.value.usage)
+        return
+
+
+    if model.interval == Intervals.DAY.value:
+        start_date = str(date.today() - timedelta(days=model.period))
+    elif model.interval == Intervals.MONTH.value:
+        start_date = str(date.today() - timedelta(months=model.period))
+    elif model.interval == Intervals.YEAR.value:
+        start_date = str(date.today() - timedelta(years=model.period))
+    else:
+        bot.post(Commands.PO.value.usage)
+        return None
+    
+    logger.debug(f"{start_date=}")
+
+    bot.post("Optimizing portfolio...")
+
+    opt = PortfolioOpt(model.tickers, start=start_date)
+    logger.debug("port_opt object created")
+    weights = opt.optimize_portfolio(opt_for=model.opt_for, print_results=False)['x']
+    logger.debug("weights calculated")
+
+    if model.opt_for == OptimizeFor.SHARPE.value:
+        opt_for = "Maximum Sharpe"
+    elif model.opt_for == OptimizeFor.RETURNS.value:
+        opt_for = "Maximum Returns"
+    elif model.opt_for == OptimizeFor.VOLATILITY.value:
+        opt_for = "Minimum Volatility"
+    else:
+        bot.post(Commands.PO.value.usage)
+        return None
+
+    replymsg = f"Optimal Weights for {opt_for}:\n"
+
+    for tick, weight in zip(model.tickers, weights):
+        if round(weight*100, 2) > 0:
+            replymsg += f"{tick}: {round(weight*100, 2)}%\n"
+
+    bot.post(replymsg)
+    logger.info("Bot message sent")
