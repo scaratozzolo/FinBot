@@ -74,7 +74,9 @@ async def financialadvisors(request: GroupMeCallback):
         except Exception as e:
             logger.exception(e)
             # bot.post(e)
-            bot.post(f"Sorry about that, {random.choice(list(Greetings)).value}. {random.choice(list(FailureReasons)).value}")
+            bot.post(
+                f"Sorry about that, {random.choice(list(Greetings)).value}. {random.choice(list(FailureReasons)).value}"
+            )
             return {"status": "error"}
 
     return {"status": "success"}

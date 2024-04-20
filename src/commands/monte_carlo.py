@@ -11,21 +11,18 @@ import matplotlib.pyplot as plt
 from src.constants import Intervals
 from src.models import Commands
 
-class MonteCarloModel(BaseModel):
 
+class MonteCarloModel(BaseModel):
     ticker: str
     period: int
     interval: Intervals
 
 
 def monte_carlo(msg, bot, client):
-
     msg_split = msg.split()
     try:
         model = MonteCarloModel(
-            ticker=msg_split[1].upper(),
-            period=msg_split[2],
-            interval=msg_split[3]
+            ticker=msg_split[1].upper(), period=msg_split[2], interval=msg_split[3]
         )
         logger.debug(f"{model=}")
     except Exception as excp:
@@ -57,11 +54,11 @@ def monte_carlo(msg, bot, client):
 
     bot.post("Calculating Monte Carlo Simulation...")
 
-    iterations=10000
-    t_intervals=252
+    iterations = 10000
+    t_intervals = 252
 
     data = pd.DataFrame()
-    data[model.ticker] = yf.download(model.ticker, start=start_date)['Adj Close']
+    data[model.ticker] = yf.download(model.ticker, start=start_date)["Adj Close"]
 
     log_returns = np.log(1 + data.pct_change())
     u = log_returns.mean()
@@ -70,7 +67,9 @@ def monte_carlo(msg, bot, client):
 
     drift = u - (0.5 * var)
 
-    daily_returns = np.exp(drift.values + stdev.values * norm.ppf(np.random.rand(t_intervals, iterations)))
+    daily_returns = np.exp(
+        drift.values + stdev.values * norm.ppf(np.random.rand(t_intervals, iterations))
+    )
 
     S0 = data.iloc[-1]
     price_list = np.zeros_like(daily_returns)
@@ -79,7 +78,7 @@ def monte_carlo(msg, bot, client):
         price_list[t] = price_list[t - 1] * daily_returns[t]
 
     final_prices = price_list[-1]
-    returns = np.array(sorted(((price_list[-1]/price_list[0]) - 1)*100))
+    returns = np.array(sorted(((price_list[-1] / price_list[0]) - 1) * 100))
     mean = round(final_prices.mean(), 2)
     var95 = round(returns[int(len(returns) * 0.05)], 2)
     cvar95 = round(returns[returns <= var95].mean(), 2)
@@ -92,8 +91,13 @@ def monte_carlo(msg, bot, client):
     replymsg = f"{model.ticker} Monte Carlo Stats\nSim. Price: ${mean}\nSim. VaR 95%: {var95}%\nSim. CVaR 95: {cvar95}%\nHigh: ${high}\nLow: ${low}"
 
     plt.plot(price_list)
-    plt.title(f"{model.ticker} Monte Carlo Simulation, Lookback: {model.period} {str_interval}, Lookahead: {t_intervals}")
+    plt.title(
+        f"{model.ticker} Monte Carlo Simulation, Lookback: {model.period} {str_interval}, Lookahead: {t_intervals}"
+    )
     plt.savefig("tmp.png")
-    bot.post(text=replymsg, attachments=[Images(client.session).from_file(open("tmp.png", "rb"))])
+    bot.post(
+        text=replymsg,
+        attachments=[Images(client.session).from_file(open("tmp.png", "rb"))],
+    )
     os.remove("tmp.png")
     plt.clf()

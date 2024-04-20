@@ -4,7 +4,6 @@ from src.config import config
 from src.constants import Intervals
 
 
-
 class GroupMeCallback(BaseModel):
     attachments: list = []
     avatar_url: str = ""
@@ -18,6 +17,7 @@ class GroupMeCallback(BaseModel):
     system: bool = False
     text: str
     user_id: str = ""
+
 
 class Command(BaseModel):
     command: str

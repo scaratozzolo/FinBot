@@ -7,22 +7,22 @@ class Intervals(Enum):
     YEAR = "y"
     # YEAR_TO_DATE = "ytd"
 
-class OptimizeFor(Enum):
 
+class OptimizeFor(Enum):
     SHARPE = "sharpe"
     RETURNS = "returns"
     VOLATILITY = "vol"
 
-class Greetings(Enum):
 
+class Greetings(Enum):
     CHIEF = "Chief"
     POP = "Pop"
     BEASTO = "Beasto"
     KING = "King"
     SIR = "Sir"
 
-class FailureReasons(Enum):
 
+class FailureReasons(Enum):
     ONE = "Something went wrong."
     TWO = "It appears there's been a problem."
     THREE = "Just not feeling it right now."

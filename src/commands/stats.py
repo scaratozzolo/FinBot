@@ -8,15 +8,14 @@ import matplotlib.pyplot as plt
 from groupy.api.attachments import Images
 from loguru import logger
 
-class StatsModel(BaseModel):
 
+class StatsModel(BaseModel):
     ticker: str
     period: int
     interval: Intervals
 
 
 def calc_stats(msg, bot, client):
-
     msg_split = msg.split()
 
     try:
@@ -52,13 +51,13 @@ def calc_stats(msg, bot, client):
     else:
         bot.post(Commands.STATS.value.usage)
         return None
-    
+
     logger.debug(f"{start_date=}")
 
     data = yf.download(model.ticker, start=start_date)
     logger.debug(f"{len(data)=}")
 
-    returns = data['Adj Close'].pct_change()*100
+    returns = data["Adj Close"].pct_change() * 100
     mean = round(returns.mean(), 2)
     vol = round(returns.std(), 2)
     var95 = round(returns.quantile(0.05), 2)
@@ -70,7 +69,10 @@ def calc_stats(msg, bot, client):
     returns.hist()
     plt.title(f"{model.ticker} Returns Distribution, {model.period} {str_interval}")
     plt.savefig("tmp.png")
-    bot.post(text=replymsg, attachments=[Images(client.session).from_file(open("tmp.png", "rb"))])
+    bot.post(
+        text=replymsg,
+        attachments=[Images(client.session).from_file(open("tmp.png", "rb"))],
+    )
     logger.debug("message sent")
     os.remove("tmp.png")
     plt.clf()
