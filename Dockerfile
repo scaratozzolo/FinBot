@@ -3,6 +3,7 @@ FROM python:3.11
 WORKDIR /workdir
 COPY . /workdir/
 
+# idk why it needs to be installed separately but it does
 RUN pip install GroupyAPI
 RUN pip install -r requirements.txt
 
