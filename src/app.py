@@ -1,10 +1,12 @@
 import time
 import re
+import random
 from fastapi import FastAPI
 from loguru import logger
 from src.config import config
 from src.utils import get_bot, client
 from src.models import GroupMeCallback, Commands
+from src.constants import Greetings, FailureReasons
 from src.commands.help import help_msg
 from src.commands.quote import get_quote
 from src.commands.chart import create_chart
@@ -72,7 +74,7 @@ async def financialadvisors(request: GroupMeCallback):
         except Exception as e:
             logger.exception(e)
             # bot.post(e)
-            # TODO something better probably
-            bot.post("Something went wrong.")
+            bot.post(f"Sorry about that, {random.choice(list(Greetings)).value}. {random.choice(list(FailureReasons)).value}")
+            return {"status": "error"}
 
-    return "success"
+    return {"status": "success"}
