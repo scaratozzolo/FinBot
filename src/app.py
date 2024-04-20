@@ -5,6 +5,10 @@ from loguru import logger
 from src.config import config
 from src.utils import get_bot, client
 from src.models import GroupMeCallback, Commands
+from src.commands.help import help_msg
+from src.commands.quote import get_quote
+from src.commands.chart import create_chart
+from src.commands.news import get_news
 
 app = FastAPI(
     title=config.botname,
@@ -32,15 +36,15 @@ async def financialadvisors(request: GroupMeCallback):
         try:
             if msg == Commands.HELP.value.command:
                 logger.debug("calling help_msg")
-                Commands.HELP.value.func(bot, Commands)
+                help_msg(bot, Commands)
 
             elif len(re.findall(r"\$\^?[a-zA-Z.]+", msg)) > 0:
                 logger.debug("calling get_quote")
-                Commands.QUOTE.value.func(msg, bot)
+                get_quote(msg, bot)
 
             elif msg_split[0] == Commands.CHART.value.command:
                 logger.debug("calling create_chart")
-                Commands.CHART.value.func(msg, bot, client)
+                create_chart(msg, bot, client)
 
             elif msg.lower().find("warren buffett") > -1:
                 logger.debug("calling warren")
@@ -49,11 +53,11 @@ async def financialadvisors(request: GroupMeCallback):
 
             elif msg.lower().find("crypto check") > -1:
                 logger.debug("calling crypto check")
-                Commands.QUOTE.value.func("$BTC-USD $ETH-USD $LTC-USD $XRP-USD", bot)
+                get_quote("$BTC-USD $ETH-USD $LTC-USD $XRP-USD", bot)
 
             elif msg_split[0] == Commands.NEWS.value.command:
                 logger.debug("calling get_news")
-                Commands.NEWS.value.func(msg, bot)
+                get_news(msg, bot)
 
         except Exception as e:
             logger.exception(e)
