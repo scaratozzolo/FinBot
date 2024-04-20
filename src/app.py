@@ -2,6 +2,7 @@ import time
 import re
 import random
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware 
 from loguru import logger
 from src.config import config
 from src.utils import bot, client
@@ -19,6 +20,14 @@ app = FastAPI(
     title=bot.name,
     summary="GroupMe bot to keep you up to date on finance.",
     version=config.version,
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=['*'],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 
