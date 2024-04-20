@@ -35,7 +35,7 @@ app.add_middleware(
 async def financialadvisors(request: GroupMeCallback):
     logger.info(f"{request=}")
 
-    if request.name != bot.name:
+    if request.sender_type != "bot":
         msg = request.text
         msg_split = msg.split()
         logger.debug(f"{msg=}")
