@@ -9,4 +9,4 @@ matplotlib
 loguru
 uvicorn
 gunicorn
-rocketry
+apscheduler

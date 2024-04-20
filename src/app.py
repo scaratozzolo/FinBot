@@ -14,11 +14,14 @@ from src.commands.news import get_news
 from src.commands.monte_carlo import monte_carlo
 from src.commands.stats import calc_stats
 from src.commands.portfolio_opt import portfolio_opt
+from src.scheduler import lifespan
+
 
 app = FastAPI(
     title=bot.name,
     summary="GroupMe bot to keep you up to date on finance.",
     version=config.version,
+    lifespan=lifespan,
 )
 
 app.add_middleware(
