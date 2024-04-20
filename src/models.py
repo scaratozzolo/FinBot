@@ -3,6 +3,9 @@ from enum import Enum
 from pydantic import BaseModel
 from src.config import config
 from src.commands.help import help_msg
+from src.commands.quote import get_quote
+from src.commands.chart import create_chart
+from src.commands.news import get_news
 
 
 class GroupMeCallback(BaseModel):
@@ -46,14 +49,21 @@ class Commands(Enum):
         command="",
         description=f"By adding a $ to a ticker, {config.botname} will return a live quote for the ticker.",
         usage="$<ticker>\nExample: $AAPL $TSLA $BTC-USD",
-        func=lambda x: "WIP",
+        func=get_quote,
+    )
+
+    NEWS = Command(
+        command=f"{config.bot_char}po",
+        description="Returns the latest new articles for the market or a specific ticker (default is 3).",
+        usage=f"{config.bot_char}news <ticker> num_articles\nExample: {config.bot_char}news 5\nExample: {config.bot_char}news AAPL 10\n",
+        func=get_news,
     )
 
     CHART = Command(
         command=f"{config.bot_char}chart",
         description="Returns a chart of a given ticker.",
         usage=f"{config.bot_char}chart ticker period interval\nExample: {config.bot_char}chart TSLA 3 m\nAvailable intervals: {', '.join(i.value for i in Intervals)}",
-        func=lambda x: "WIP",
+        func=create_chart,
     )
 
     PO = Command(

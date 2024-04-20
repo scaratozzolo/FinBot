@@ -51,6 +51,10 @@ async def financialadvisors(request: GroupMeCallback):
                 logger.debug("calling crypto check")
                 Commands.QUOTE.value.func("$BTC-USD $ETH-USD $LTC-USD $XRP-USD", bot)
 
+            elif msg_split[0] == Commands.NEWS.value.command:
+                logger.debug("calling get_news")
+                Commands.NEWS.value.func(msg, bot)
+
         except Exception as e:
             logger.exception(e)
             # bot.post(e)
