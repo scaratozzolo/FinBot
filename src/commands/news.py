@@ -1,6 +1,5 @@
 from datetime import date
 from loguru import logger
-from src.config import config
 from src.utils import get_finnhub_client
 from src.models import Commands
 

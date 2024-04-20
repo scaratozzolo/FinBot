@@ -5,7 +5,6 @@ import yfinance as yf
 import matplotlib.pyplot as plt
 from groupy.api.attachments import Images
 from pydantic import BaseModel, ValidationError
-from src.config import config
 from src.models import Commands
 from src.constants import Intervals
 

@@ -13,7 +13,7 @@ def help_msg(bot) -> str:
         value = command.value.command
         replymsg += f"{i+1}. {value if value else ''}{' - ' if value else ''}{command.value.description}\n{command.value.usage}\n\n"
 
-    replymsg += f"Follow along on GitHub: https://github.com/scaratozzolo/FinBot"
+    replymsg += "Follow along on GitHub: https://github.com/scaratozzolo/FinBot"
 
     bot.post(replymsg)
     logger.debug("bot posted help")

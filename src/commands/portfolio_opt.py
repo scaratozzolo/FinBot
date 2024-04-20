@@ -144,7 +144,7 @@ class PortfolioOpt:
             )
         else:
             raise ValueError(
-                f"'opt_for' can only take the values 'sharpe', 'returns', or 'vol'"
+                "'opt_for' can only take the values 'sharpe', 'returns', or 'vol'"
             )
 
         if print_results:
@@ -201,7 +201,7 @@ class PortfolioOpt:
             )
         else:
             raise ValueError(
-                f"'opt_for' can only take the values 'sharpe', 'returns', or 'vol'"
+                "'opt_for' can only take the values 'sharpe', 'returns', or 'vol'"
             )
 
         if print_results:
@@ -250,7 +250,7 @@ class PortfolioOpt:
             )
         else:
             raise ValueError(
-                f"'opt_for' can only take the values 'sharpe', 'returns', or 'vol'"
+                "'opt_for' can only take the values 'sharpe', 'returns', or 'vol'"
             )
 
         if print_results:
@@ -305,7 +305,7 @@ class PortfolioOpt:
             )
         else:
             raise ValueError(
-                f"'opt_for' can only take the values 'sharpe', 'returns', or 'vol'"
+                "'opt_for' can only take the values 'sharpe', 'returns', or 'vol'"
             )
 
         if print_results:
@@ -360,29 +360,29 @@ class PortfolioOpt:
         """
 
         print(
-            f"Data start:" + " " * (self.max_str - len("Data start:")) + f"{self.start}"
+            "Data start:" + " " * (self.max_str - len("Data start:")) + f"{self.start}"
         )
-        print(f"Data end:" + " " * (self.max_str - len("Data end:")) + f"{self.end}\n")
+        print("Data end:" + " " * (self.max_str - len("Data end:")) + f"{self.end}\n")
 
         print("\nLookback Performance (Annualized)")
         print(
-            f"Expected Returns:"
+            "Expected Returns:"
             + " " * (self.max_str - len("Expected Returns:"))
             + f"{round(self._get_ret_vol_sr(opt_results['x'])[0],3)}"
         )
         print(
-            f"Vol:"
+            "Vol:"
             + " " * (self.max_str - len("Vol:"))
             + f"{round(self._get_ret_vol_sr(opt_results['x'])[1],3)}"
         )
         print(
-            f"Sharpe ratio:"
+            "Sharpe ratio:"
             + " " * (self.max_str - len("Sharpe ratio:"))
             + f"{round(self._get_ret_vol_sr(opt_results['x'])[2],3)}"
         )
         if beta_target is not None:
             print(
-                f"Beta Target:"
+                "Beta Target:"
                 + " " * (self.max_str - len("Beta Target:"))
                 + f"{beta_target}"
             )
@@ -391,38 +391,38 @@ class PortfolioOpt:
             prev_month_data = self.calc_prev_month(opt_results)
             print(f"\nLookahead Performance: {self.lookahead} Days")
             print(
-                f"Returns:"
+                "Returns:"
                 + " " * (self.max_str - len("Returns:"))
                 + f"{prev_month_data[0]}"
             )
             print(
-                f"Vol:" + " " * (self.max_str - len("Vol:")) + f"{prev_month_data[1]}"
+                "Vol:" + " " * (self.max_str - len("Vol:")) + f"{prev_month_data[1]}"
             )
             print(
-                f"Sharpe Ratio:"
+                "Sharpe Ratio:"
                 + " " * (self.max_str - len("Sharpe Ratio:"))
                 + f"{prev_month_data[2]}"
             )
 
         print(f"\nBenchmark ({self.benchmark})")
         print(
-            f"Expected Returns:"
+            "Expected Returns:"
             + " " * (self.max_str - len("Expected Returns:"))
             + f"{self.bench_er}"
         )
-        print(f"Vol:" + " " * (self.max_str - len(f"Vol:")) + f"{self.bench_vol}")
+        print("Vol:" + " " * (self.max_str - len("Vol:")) + f"{self.bench_vol}")
         print(
-            f"Sharpe ratio:"
-            + " " * (self.max_str - len(f"Sharpe ratio:"))
+            "Sharpe ratio:"
+            + " " * (self.max_str - len("Sharpe ratio:"))
             + f"{self.bench_sharpe}"
         )
         print(
-            f"Real returns:"
+            "Real returns:"
             + " " * (self.max_str - len("Real returns:"))
             + f"{(np.exp(self.bench_ret.sum()) - 1).round(3)}"
         )
         print(
-            f"Real Sharpe ratio:"
+            "Real Sharpe ratio:"
             + " " * (self.max_str - len("Real Sharpe ratio:"))
             + f"{((np.exp(self.bench_ret.sum()) - 1)/self.bench_vol).round(3)}"
         )
@@ -493,33 +493,33 @@ class PortfolioOpt:
         f = open(file_name, "w")
 
         f.write(
-            f"Data start:"
+            "Data start:"
             + " " * (self.max_str - len("Data start:"))
             + f"{self.start}\n"
         )
         f.write(
-            f"Data end:" + " " * (self.max_str - len("Data end:")) + f"{self.end}\n"
+            "Data end:" + " " * (self.max_str - len("Data end:")) + f"{self.end}\n"
         )
 
         f.write("\nLookback Performance (Annualized)\n")
         f.write(
-            f"Expected Returns:"
+            "Expected Returns:"
             + " " * (self.max_str - len("Expected Returns:"))
             + f"{round(self._get_ret_vol_sr(opt_results['x'])[0],3)}\n"
         )
         f.write(
-            f"Vol:"
+            "Vol:"
             + " " * (self.max_str - len("Vol:"))
             + f"{round(self._get_ret_vol_sr(opt_results['x'])[1],3)}\n"
         )
         f.write(
-            f"Sharpe ratio:"
+            "Sharpe ratio:"
             + " " * (self.max_str - len("Sharpe ratio:"))
             + f"{round(self._get_ret_vol_sr(opt_results['x'])[2],3)}\n"
         )
         if beta_target is not None:
             f.write(
-                f"Beta Target:"
+                "Beta Target:"
                 + " " * (self.max_str - len("Beta Target:"))
                 + f"{beta_target}\n"
             )
@@ -528,36 +528,36 @@ class PortfolioOpt:
             prev_month_data = self.calc_prev_month(opt_results)
             f.write(f"\nLookahead Performance: {self.lookahead} Days")
         f.write(
-            f"Returns:"
+            "Returns:"
             + " " * (self.max_str - len("Returns:"))
             + f"{prev_month_data[0]}"
         )
-        f.write(f"Vol:" + " " * (self.max_str - len("Vol:")) + f"{prev_month_data[1]}")
+        f.write("Vol:" + " " * (self.max_str - len("Vol:")) + f"{prev_month_data[1]}")
         f.write(
-            f"Sharpe Ratio:"
+            "Sharpe Ratio:"
             + " " * (self.max_str - len("Sharpe Ratio:"))
             + f"{prev_month_data[2]}"
         )
 
         f.write(f"\nBenchmark ({self.benchmark})\n")
         f.write(
-            f"Expected Returns:"
+            "Expected Returns:"
             + " " * (self.max_str - len("Expected Returns:"))
             + f"{self.bench_er}\n"
         )
-        f.write(f"Vol:" + " " * (self.max_str - len(f"Vol:")) + f"{self.bench_vol}\n")
+        f.write("Vol:" + " " * (self.max_str - len("Vol:")) + f"{self.bench_vol}\n")
         f.write(
-            f"Sharpe ratio:"
-            + " " * (self.max_str - len(f"Sharpe ratio:"))
+            "Sharpe ratio:"
+            + " " * (self.max_str - len("Sharpe ratio:"))
             + f"{self.bench_sharpe}\n"
         )
         f.write(
-            f"Real returns:"
+            "Real returns:"
             + " " * (self.max_str - len("Real returns:"))
             + f"{(np.exp(self.bench_ret.sum()) - 1).round(3)}\n"
         )
         f.write(
-            f"Real Sharpe ratio:"
+            "Real Sharpe ratio:"
             + " " * (self.max_str - len("Real Sharpe ratio:"))
             + f"{((np.exp(self.bench_ret.sum()) - 1)/self.bench_vol).round(3)}\n"
         )
