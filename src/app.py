@@ -10,6 +10,7 @@ from src.commands.quote import get_quote
 from src.commands.chart import create_chart
 from src.commands.news import get_news
 from src.commands.monte_carlo import monte_carlo
+from src.commands.stats import calc_stats
 
 app = FastAPI(
     title=config.botname,
@@ -63,6 +64,10 @@ async def financialadvisors(request: GroupMeCallback):
             elif msg_split[0] == Commands.MC.value.command:
                 logger.debug("calling monte_carlo")
                 monte_carlo(msg, bot, client)
+
+            elif msg_split[0] == Commands.STATS.value.command:
+                logger.debug("calling stats")
+                calc_stats(msg, bot)
 
         except Exception as e:
             logger.exception(e)

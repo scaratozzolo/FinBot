@@ -57,7 +57,13 @@ class Commands(Enum):
     )
 
     MC = Command(
-        command=f"{config.bot_char}MC",
+        command=f"{config.bot_char}mc",
         description="Runs a Monte Carlo simulation based on data of a give time range.",
         usage=f"{config.bot_char}mc ticker period interval\nExample: {config.bot_char}mc AAPL 3 y\nAvailable intervals: {', '.join(i.value for i in Intervals)}.",
+    )
+
+    STATS = Command(
+        command=f"{config.bot_char}stats",
+        description="Calculates daily historical statistics over a given time range.",
+        usage=f"{config.bot_char}stats ticker period interval\nExample: {config.bot_char}stats AAPL 3 y\nAvailable intervals: {', '.join(i.value for i in Intervals)}.",
     )
