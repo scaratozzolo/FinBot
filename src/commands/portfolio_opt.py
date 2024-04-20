@@ -51,7 +51,7 @@ class PortfolioOpt:
         ]
         # self.bench_ret = self.bench.pct_change()
         self.bench_ret = np.log(self.bench / self.bench.shift(1))
-        self.bench_ret.rename(self.benchmark, axis=1, inplace=True)
+        self.bench_ret.rename(self.benchmark, inplace=True)
 
         self.bench_er = round((self.bench_ret.mean() * 252), 3)
         self.bench_vol = round((self.bench_ret.std() * np.sqrt(252)), 3)
@@ -635,12 +635,12 @@ def portfolio_opt(msg):
         bot.post(Commands.PO.value.usage)
         return
 
-    if model.interval == Intervals.DAY.value:
+    if model.interval == Intervals.DAY:
         start_date = str(date.today() - timedelta(days=model.period))
-    elif model.interval == Intervals.MONTH.value:
-        start_date = str(date.today() - timedelta(months=model.period))
-    elif model.interval == Intervals.YEAR.value:
-        start_date = str(date.today() - timedelta(years=model.period))
+    elif model.interval == Intervals.MONTH:
+        start_date = str(date.today() - timedelta(weeks=model.period*4))
+    elif model.interval == Intervals.YEAR:
+        start_date = str(date.today() - timedelta(weeks=model.period*52))
     else:
         bot.post(Commands.PO.value.usage)
         return None
@@ -651,14 +651,14 @@ def portfolio_opt(msg):
 
     opt = PortfolioOpt(model.tickers, start=start_date)
     logger.debug("port_opt object created")
-    weights = opt.optimize_portfolio(opt_for=model.opt_for, print_results=False)["x"]
+    weights = opt.optimize_portfolio(opt_for=model.opt_for.value, print_results=False)["x"]
     logger.debug("weights calculated")
 
-    if model.opt_for == OptimizeFor.SHARPE.value:
+    if model.opt_for == OptimizeFor.SHARPE:
         opt_for = "Maximum Sharpe"
-    elif model.opt_for == OptimizeFor.RETURNS.value:
+    elif model.opt_for == OptimizeFor.RETURNS:
         opt_for = "Maximum Returns"
-    elif model.opt_for == OptimizeFor.VOLATILITY.value:
+    elif model.opt_for == OptimizeFor.VOLATILITY:
         opt_for = "Minimum Volatility"
     else:
         bot.post(Commands.PO.value.usage)

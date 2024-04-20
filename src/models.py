@@ -40,7 +40,7 @@ class Commands(Enum):
     )
 
     NEWS = Command(
-        command=f"{config.bot_char}po",
+        command=f"{config.bot_char}news",
         description="Returns the latest new articles for the market or a specific ticker (default is 3).",
         usage=f"{config.bot_char}news <ticker> num_articles\nExample: {config.bot_char}news 5\nExample: {config.bot_char}news AAPL 10\n",
     )

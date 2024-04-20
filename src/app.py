@@ -13,6 +13,7 @@ from src.commands.chart import create_chart
 from src.commands.news import get_news
 from src.commands.monte_carlo import monte_carlo
 from src.commands.stats import calc_stats
+from src.commands.portfolio_opt import portfolio_opt
 
 app = FastAPI(
     title=bot.name,
@@ -33,7 +34,7 @@ async def financialadvisors(request: GroupMeCallback):
         if msg == "":
             return {"status": "no message text"}
 
-        time.sleep(2)
+        # time.sleep(2)
 
         try:
             if msg == Commands.HELP.value.command:
@@ -55,7 +56,7 @@ async def financialadvisors(request: GroupMeCallback):
 
             elif msg.lower().find("crypto check") > -1:
                 logger.debug("calling crypto check")
-                get_quote("$BTC-USD $ETH-USD $LTC-USD $XRP-USD", bot)
+                get_quote("$BTC-USD $ETH-USD $LTC-USD $XRP-USD")
 
             elif msg_split[0] == Commands.NEWS.value.command:
                 logger.debug("calling get_news")
@@ -68,6 +69,10 @@ async def financialadvisors(request: GroupMeCallback):
             elif msg_split[0] == Commands.STATS.value.command:
                 logger.debug("calling stats")
                 calc_stats(msg)
+
+            elif msg_split[0] == Commands.PO.value.command:
+                logger.debug("calling port opt")
+                portfolio_opt(msg)
 
         except Exception as e:
             logger.exception(e)

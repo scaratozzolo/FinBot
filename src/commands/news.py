@@ -8,6 +8,8 @@ fh_client = get_finnhub_client()
 
 
 def get_news(msg):
+    logger.debug("inside get_news")
+
     msg_split = msg.split()
     if len(msg_split) > 3:
         bot.post(Commands.NEWS.value.usage)
@@ -22,7 +24,7 @@ def get_news(msg):
                 num_articles = int(msg_split[1])
                 ticker = None
             except Exception as excp:
-                logger.error(excp)
+                logger.warning(excp)
                 num_articles = default_articles
                 ticker = msg_split[1]
         else:

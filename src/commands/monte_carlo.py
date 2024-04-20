@@ -30,20 +30,20 @@ def monte_carlo(msg):
         bot.post(Commands.MC.value.usage)
         return
 
-    if model.interval == Intervals.DAY.value:
+    if model.interval == Intervals.DAY:
         start_date = str(date.today() - timedelta(days=model.period))
         if model.period == 1:
             str_interval = "day"
         else:
             str_interval = "days"
-    elif model.interval == Intervals.MONTH.value:
-        start_date = str(date.today() - timedelta(months=model.period))
+    elif model.interval == Intervals.MONTH:
+        start_date = str(date.today() - timedelta(weeks=model.period*4))
         if model.period == 1:
             str_interval = "month"
         else:
             str_interval = "months"
-    elif model.interval == Intervals.YEAR.value:
-        start_date = str(date.today() - timedelta(years=model.period))
+    elif model.interval == Intervals.YEAR:
+        start_date = str(date.today() - timedelta(weeks=model.period*52))
         if model.period == 1:
             str_interval = "year"
         else:
