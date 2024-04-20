@@ -22,7 +22,7 @@ app = FastAPI(
 )
 
 
-@app.post("/financialadvisorstest")
+@app.post("/financialadvisors")
 async def financialadvisors(request: GroupMeCallback):
     logger.info(f"{request=}")
 
