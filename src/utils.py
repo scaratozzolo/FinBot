@@ -16,28 +16,14 @@ def get_bot() -> Bot:
         if i.bot_id == config.bot_id:
             bot = i
             break
-    if bot is None:
-        bot = bot_manger.create(
-            config.botname, group_id=config.group_id, callback_url=config.callback_url
-        )
-        logger.debug("bot created")
+    
+    if not bot:
+        logger.error(f"Bot with {config.bot_id=} could not be found.")
+        return
 
     logger.info(bot)
 
     return bot
-
-
-def get_group_name() -> str:
-    group_name = None
-    groups = list(client.groups.list_all())
-    for group in groups:
-        if group.id == config.group_id:
-            group_name = group.name
-            break
-    logger.debug(group_name)
-
-    return group_name
-
 
 def get_finnhub_client() -> finnhub.Client:
     return finnhub.Client(api_key=config.finnhub_api_key)
