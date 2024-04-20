@@ -38,13 +38,13 @@ def calc_stats(msg):
         else:
             str_interval = "days"
     elif msg_split[-1] == Intervals.MONTH.value:
-        start_date = str(date.today() - timedelta(weeks=model.period*4))
+        start_date = str(date.today() - timedelta(weeks=model.period * 4))
         if model.period == 1:
             str_interval = "month"
         else:
             str_interval = "months"
     elif msg_split[-1] == Intervals.YEAR.value:
-        start_date = str(date.today() - timedelta(weeks=model.period*52))
+        start_date = str(date.today() - timedelta(weeks=model.period * 52))
         if model.period == 1:
             str_interval = "year"
         else:

@@ -396,9 +396,7 @@ class PortfolioOpt:
                 + " " * (self.max_str - len("Returns:"))
                 + f"{prev_month_data[0]}"
             )
-            print(
-                "Vol:" + " " * (self.max_str - len("Vol:")) + f"{prev_month_data[1]}"
-            )
+            print("Vol:" + " " * (self.max_str - len("Vol:")) + f"{prev_month_data[1]}")
             print(
                 "Sharpe Ratio:"
                 + " " * (self.max_str - len("Sharpe Ratio:"))
@@ -498,9 +496,7 @@ class PortfolioOpt:
             + " " * (self.max_str - len("Data start:"))
             + f"{self.start}\n"
         )
-        f.write(
-            "Data end:" + " " * (self.max_str - len("Data end:")) + f"{self.end}\n"
-        )
+        f.write("Data end:" + " " * (self.max_str - len("Data end:")) + f"{self.end}\n")
 
         f.write("\nLookback Performance (Annualized)\n")
         f.write(
@@ -638,9 +634,9 @@ def portfolio_opt(msg):
     if model.interval == Intervals.DAY:
         start_date = str(date.today() - timedelta(days=model.period))
     elif model.interval == Intervals.MONTH:
-        start_date = str(date.today() - timedelta(weeks=model.period*4))
+        start_date = str(date.today() - timedelta(weeks=model.period * 4))
     elif model.interval == Intervals.YEAR:
-        start_date = str(date.today() - timedelta(weeks=model.period*52))
+        start_date = str(date.today() - timedelta(weeks=model.period * 52))
     else:
         bot.post(Commands.PO.value.usage)
         return None
@@ -651,7 +647,9 @@ def portfolio_opt(msg):
 
     opt = PortfolioOpt(model.tickers, start=start_date)
     logger.debug("port_opt object created")
-    weights = opt.optimize_portfolio(opt_for=model.opt_for.value, print_results=False)["x"]
+    weights = opt.optimize_portfolio(opt_for=model.opt_for.value, print_results=False)[
+        "x"
+    ]
     logger.debug("weights calculated")
 
     if model.opt_for == OptimizeFor.SHARPE:

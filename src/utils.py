@@ -43,7 +43,4 @@ def get_finnhub_client() -> finnhub.Client:
     return finnhub.Client(api_key=config.finnhub_api_key)
 
 
-
-
-
 bot = get_bot()

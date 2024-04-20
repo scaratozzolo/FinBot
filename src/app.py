@@ -1,11 +1,10 @@
-import time
 import re
 import random
 from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware 
+from fastapi.middleware.cors import CORSMiddleware
 from loguru import logger
 from src.config import config
-from src.utils import bot, client
+from src.utils import bot
 from src.models import GroupMeCallback, Commands
 from src.constants import Greetings, FailureReasons
 from src.commands.help import help_msg
@@ -24,7 +23,7 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=['*'],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -42,8 +41,6 @@ async def financialadvisors(request: GroupMeCallback):
 
         if msg == "":
             return {"status": "no message text"}
-
-        # time.sleep(2)
 
         try:
             if msg == Commands.HELP.value.command:

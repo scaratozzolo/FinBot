@@ -41,13 +41,13 @@ def create_chart(msg):
         else:
             str_interval = "days"
     elif model.interval == Intervals.MONTH:
-        start_date = str(date.today() - timedelta(weeks=model.period*4))
+        start_date = str(date.today() - timedelta(weeks=model.period * 4))
         if model.period == 1:
             str_interval = "month"
         else:
             str_interval = "months"
     elif model.interval == Intervals.YEAR:
-        start_date = str(date.today() - timedelta(weeks=model.period*52))
+        start_date = str(date.today() - timedelta(weeks=model.period * 52))
         if model.period == 1:
             str_interval = "year"
         else:
