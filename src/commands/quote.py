@@ -2,11 +2,11 @@ import re
 from datetime import date, timedelta
 import pandas as pd
 import yfinance as yf
-
 from loguru import logger
+from src.utils import bot
 
 
-def get_quote(msg, bot):
+def get_quote(msg):
     logger.debug("inside get_quote")
 
     try:

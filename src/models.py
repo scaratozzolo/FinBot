@@ -2,6 +2,7 @@ from enum import Enum
 from pydantic import BaseModel
 from src.config import config
 from src.constants import Intervals
+from src.utils import bot
 
 
 class GroupMeCallback(BaseModel):
@@ -34,7 +35,7 @@ class Commands(Enum):
 
     QUOTE = Command(
         command="",
-        description=f"By adding a $ to a ticker, {config.botname} will return a live quote for the ticker.",
+        description=f"By adding a $ to a ticker, {bot.name} will return a live quote for the ticker.",
         usage="$<ticker>\nExample: $AAPL $TSLA $BTC-USD",
     )
 

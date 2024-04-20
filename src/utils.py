@@ -13,7 +13,7 @@ def get_bot() -> Bot:
     bot = None
     for i in bot_manger.list():
         logger.debug(f"{i=}")
-        if i.name == config.botname:
+        if i.bot_id == config.bot_id:
             bot = i
             break
     if bot is None:
@@ -41,3 +41,9 @@ def get_group_name() -> str:
 
 def get_finnhub_client() -> finnhub.Client:
     return finnhub.Client(api_key=config.finnhub_api_key)
+
+
+
+
+
+bot = get_bot()

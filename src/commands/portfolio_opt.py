@@ -7,6 +7,7 @@ from scipy import optimize
 from datetime import date, timedelta
 from src.constants import Intervals, OptimizeFor
 from src.models import Commands
+from src.utils import bot
 
 
 class PortfolioOpt:
@@ -617,7 +618,7 @@ class PortfolioOptModel(BaseModel):
     tickers: list[str]
 
 
-def portfolio_opt(msg, bot):
+def portfolio_opt(msg):
     msg_split = msg.split()
     try:
         model = PortfolioOptModel(

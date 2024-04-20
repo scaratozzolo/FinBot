@@ -4,13 +4,15 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Config(BaseSettings):
     version: str = "2.0.0b1"
-    botname: str = "FinBot"
-    bot_char: str = "?"
 
     groupme_access_token: str
-    group_id: str
 
-    callback_url: str
+    bot_id: typing.Optional[str] = None
+    bot_char: str = "?"
+
+    group_id: typing.Optional[str] = None
+    botname: typing.Optional[str] = None
+    callback_url: typing.Optional[str] = None
 
     av_api_key: str
     finnhub_api_key: str

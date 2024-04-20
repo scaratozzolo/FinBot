@@ -1,12 +1,13 @@
 from loguru import logger
 from src.config import config
 from src.models import Commands
+from src.utils import bot
 
 
-def help_msg(bot) -> str:
+def help_msg() -> str:
     logger.debug("inside help_msg")
 
-    replymsg = f"{config.botname} v{config.version} Help\n"
+    replymsg = f"{bot.name} v{config.version} Help\n"
 
     for i, command in enumerate(Commands):
         logger.debug(f"{command=}")

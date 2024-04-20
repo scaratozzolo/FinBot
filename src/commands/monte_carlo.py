@@ -10,7 +10,7 @@ from loguru import logger
 import matplotlib.pyplot as plt
 from src.constants import Intervals
 from src.models import Commands
-
+from src.utils import bot, client
 
 class MonteCarloModel(BaseModel):
     ticker: str
@@ -18,7 +18,7 @@ class MonteCarloModel(BaseModel):
     interval: Intervals
 
 
-def monte_carlo(msg, bot, client):
+def monte_carlo(msg):
     msg_split = msg.split()
     try:
         model = MonteCarloModel(

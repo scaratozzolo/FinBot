@@ -7,6 +7,7 @@ from groupy.api.attachments import Images
 from pydantic import BaseModel, ValidationError
 from src.models import Commands
 from src.constants import Intervals
+from src.utils import bot, client
 
 
 class ChartModel(BaseModel):
@@ -15,11 +16,12 @@ class ChartModel(BaseModel):
     interval: Intervals = Intervals.YEAR
 
 
-def create_chart(msg, bot, client):
+def create_chart(msg):
     logger.debug("inside create_chart")
     msg_split = msg.split()
 
     try:
+        # TODO append None to msg_split to get to len 4 will allow for default values
         model = ChartModel(
             ticker=msg_split[1],
             period=msg_split[2],

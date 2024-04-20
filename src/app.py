@@ -4,7 +4,7 @@ import random
 from fastapi import FastAPI
 from loguru import logger
 from src.config import config
-from src.utils import get_bot, client
+from src.utils import bot, client
 from src.models import GroupMeCallback, Commands
 from src.constants import Greetings, FailureReasons
 from src.commands.help import help_msg
@@ -15,12 +15,10 @@ from src.commands.monte_carlo import monte_carlo
 from src.commands.stats import calc_stats
 
 app = FastAPI(
-    title=config.botname,
+    title=bot.name,
     summary="GroupMe bot to keep you up to date on finance.",
     version=config.version,
 )
-
-bot = get_bot()
 
 
 @app.post("/financialadvisorstest")
@@ -40,15 +38,15 @@ async def financialadvisors(request: GroupMeCallback):
         try:
             if msg == Commands.HELP.value.command:
                 logger.debug("calling help_msg")
-                help_msg(bot)
+                help_msg()
 
             elif len(re.findall(r"\$\^?[a-zA-Z.]+", msg)) > 0:
                 logger.debug("calling get_quote")
-                get_quote(msg, bot)
+                get_quote(msg)
 
             elif msg_split[0] == Commands.CHART.value.command:
                 logger.debug("calling create_chart")
-                create_chart(msg, bot, client)
+                create_chart(msg)
 
             elif msg.lower().find("warren buffett") > -1:
                 logger.debug("calling warren")
@@ -61,15 +59,15 @@ async def financialadvisors(request: GroupMeCallback):
 
             elif msg_split[0] == Commands.NEWS.value.command:
                 logger.debug("calling get_news")
-                get_news(msg, bot)
+                get_news(msg)
 
             elif msg_split[0] == Commands.MC.value.command:
                 logger.debug("calling monte_carlo")
-                monte_carlo(msg, bot, client)
+                monte_carlo(msg)
 
             elif msg_split[0] == Commands.STATS.value.command:
                 logger.debug("calling stats")
-                calc_stats(msg, bot)
+                calc_stats(msg)
 
         except Exception as e:
             logger.exception(e)

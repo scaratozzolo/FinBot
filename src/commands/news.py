@@ -2,11 +2,12 @@ from datetime import date
 from loguru import logger
 from src.utils import get_finnhub_client
 from src.models import Commands
+from src.utils import bot
 
 fh_client = get_finnhub_client()
 
 
-def get_news(msg, bot):
+def get_news(msg):
     msg_split = msg.split()
     if len(msg_split) > 3:
         bot.post(Commands.NEWS.value.usage)

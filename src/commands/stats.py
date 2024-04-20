@@ -7,6 +7,7 @@ import yfinance as yf
 import matplotlib.pyplot as plt
 from groupy.api.attachments import Images
 from loguru import logger
+from src.utils import bot, client
 
 
 class StatsModel(BaseModel):
@@ -15,7 +16,7 @@ class StatsModel(BaseModel):
     interval: Intervals
 
 
-def calc_stats(msg, bot, client):
+def calc_stats(msg):
     msg_split = msg.split()
 
     try:
