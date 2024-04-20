@@ -30,3 +30,4 @@ def get_finnhub_client() -> finnhub.Client:
 
 
 bot = get_bot()
+finnhub_client = get_finnhub_client()
