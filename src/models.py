@@ -52,6 +52,12 @@ class Commands(Enum):
 
     PO = Command(
         command=f"{config.bot_char}po",
-        description="Returns opimal weights for a given portfolio",
+        description="Returns opimal weights for a given portfolio.",
         usage=f"{config.bot_char}po period interval opt_for comma, seperated, tickers\nExample: {config.bot_char}po 3 y sharpe DIS, TSLA, GOOG\nAvailable intervals: {', '.join(i.value for i in Intervals)}.\nAvailable optimizations: sharpe, returns, vol.\nPeriod and interval is the length of the lookback data.",
+    )
+
+    MC = Command(
+        command=f"{config.bot_char}MC",
+        description="Runs a Monte Carlo simulation based on data of a give time range.",
+        usage=f"{config.bot_char}mc ticker period interval\nExample: {config.bot_char}mc AAPL 3 y\nAvailable intervals: {', '.join(i.value for i in Intervals)}.",
     )
