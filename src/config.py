@@ -3,7 +3,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Config(BaseSettings):
-    version: str = "2.0.0b1"
+    version: str = "2.0.0"
 
     groupme_access_token: str
 
