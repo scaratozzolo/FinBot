@@ -6,7 +6,6 @@ from src.commands.help import help_msg
 
 
 class GroupMeCallback(BaseModel):
-
     attachments: list = []
     avatar_url: str = ""
     created_at: int = 0
@@ -20,22 +19,22 @@ class GroupMeCallback(BaseModel):
     text: str
     user_id: str = ""
 
-class Intervals(Enum):
 
+class Intervals(Enum):
     DAY = "d"
     MONTH = "m"
     YEAR = "y"
     # YEAR_TO_DATE = "ytd"
 
-class Command(BaseModel):
 
+class Command(BaseModel):
     command: str
     description: str
     usage: str
     func: typing.Callable
 
-class Commands(Enum):
 
+class Commands(Enum):
     HELP = Command(
         command=f"{config.bot_char}help",
         description="Gives an overview of the available commands.",
@@ -47,19 +46,19 @@ class Commands(Enum):
         command="",
         description=f"By adding a $ to a ticker, {config.botname} will return a live quote for the ticker.",
         usage="$<ticker>\nExample: $AAPL $TSLA $BTC-USD",
-        func=lambda x: "WIP"
+        func=lambda x: "WIP",
     )
 
     CHART = Command(
         command=f"{config.bot_char}chart",
         description="Returns a chart of a given ticker.",
         usage=f"{config.bot_char}chart ticker period interval\nExample: {config.bot_char}chart TSLA 3 m\nAvailable intervals: {', '.join(i.value for i in Intervals)}",
-        func=lambda x: "WIP"
+        func=lambda x: "WIP",
     )
 
     PO = Command(
         command=f"{config.bot_char}po",
         description="Returns opimal weights for a given portfolio",
-        usage="po period interval opt_for comma, seperated, tickers",
-        func=lambda x: "WIP"
+        usage=f"{config.bot_char}po period interval opt_for comma, seperated, tickers",
+        func=lambda x: "WIP",
     )

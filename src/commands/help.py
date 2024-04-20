@@ -3,7 +3,6 @@ from src.config import config
 
 
 def help_msg(bot, commands) -> str:
-
     logger.debug("inside help_msg")
 
     replymsg = f"{config.botname} v{config.version} Help\n"
@@ -15,6 +14,5 @@ def help_msg(bot, commands) -> str:
 
     replymsg += f"Follow along on GitHub: https://github.com/scaratozzolo/FinBot"
 
-    # bot.post(replymsg)
-    print(replymsg)
+    bot.post(replymsg)
     logger.debug("bot posted help")

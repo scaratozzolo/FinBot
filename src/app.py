@@ -9,14 +9,14 @@ from src.models import GroupMeCallback, Commands
 app = FastAPI(
     title=config.botname,
     summary="GroupMe bot to keep you up to date on finance.",
-    version=config.version
+    version=config.version,
 )
 
 bot = get_bot()
 
+
 @app.post("/financialadvisorstest")
 async def financialadvisors(request: GroupMeCallback):
-
     logger.info(f"{request=}")
 
     if request.name != bot.name:
@@ -41,16 +41,15 @@ async def financialadvisors(request: GroupMeCallback):
             elif msg_split[0] == Commands.CHART.value.command:
                 logger.debug("calling create_chart")
                 Commands.CHART.value.func(msg, bot, client)
-            
+
             elif msg.lower().find("warren buffett") > -1:
                 logger.debug("calling warren")
                 bot.post('"Buy the fucking dip" - Warren Buffett')
                 logger.debug("bot posted warren")
-            
+
             elif msg.lower().find("crypto check") > -1:
                 logger.debug("calling crypto check")
                 Commands.QUOTE.value.func("$BTC-USD $ETH-USD $LTC-USD $XRP-USD", bot)
-
 
         except Exception as e:
             logger.exception(e)

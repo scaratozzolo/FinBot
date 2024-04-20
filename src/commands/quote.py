@@ -14,7 +14,7 @@ def get_quote(msg, bot):
         tickers = [ticker[1:].upper() for ticker in tickers]
         logger.debug(tickers)
 
-        data = yf.download(tickers, start=date.today()-timedelta(days=7))["Adj Close"]
+        data = yf.download(tickers, start=date.today() - timedelta(days=7))["Adj Close"]
         print(data)
         if isinstance(data, pd.DataFrame):
             logger.debug(f"df rows {len(data)}, cols {data.columns}")
@@ -22,19 +22,19 @@ def get_quote(msg, bot):
             logger.debug(f"df rows {len(data)}, cols {data.columns}")
         else:
             logger.debug(f"series rows {len(data)}")
-            
+
         quote = data.iloc[-1].round(2)
         logger.debug(f"{quote=}")
-        pchange = (data.pct_change().dropna().iloc[-1]*100).round(2)
+        pchange = (data.pct_change().dropna().iloc[-1] * 100).round(2)
         logger.debug(f"{pchange=}")
         dchange = (data.iloc[-1] - data.iloc[-2]).round(2)
         logger.debug(f"{dchange=}")
-        
+
         if len(tickers) < 2:
             logger.debug("1 ticker")
             yf_ticker = yf.Ticker(tickers[0]).info
             try:
-                ticker_name = yf_ticker['shortName']
+                ticker_name = yf_ticker["shortName"]
             except Exception as excp:
                 logger.error(excp)
                 ticker_name = tickers[0]
@@ -47,7 +47,7 @@ def get_quote(msg, bot):
                 try:
                     yf_ticker = yf.Ticker(ticker).info
                     try:
-                        ticker_name = yf_ticker['shortName']
+                        ticker_name = yf_ticker["shortName"]
                     except Exception as excp:
                         logger.error(excp)
                         ticker_name = ticker

@@ -10,7 +10,6 @@ from src.models import Intervals, Commands
 
 
 class ChartModel(BaseModel):
-
     ticker: str
     period: int = 1
     interval: Intervals = Intervals.YEAR
@@ -30,7 +29,7 @@ def create_chart(msg, bot, client):
     except ValidationError as error:
         logger.error(error)
         bot.post(Commands.CHART.value.usage)
-        return 
+        return
 
     logger.debug(f"{model.period=}")
     if model.interval == Intervals.DAY:
@@ -56,7 +55,6 @@ def create_chart(msg, bot, client):
         return
     logger.debug(f"start_date: {start_date}")
 
-
     data = yf.download(model.ticker, start=start_date)
     yf_ticker = yf.Ticker(model.ticker).info
     try:
@@ -70,9 +68,14 @@ def create_chart(msg, bot, client):
 
     replymsg = f'{ticker_name}\nDollar Change: {round(data["Adj Close"][-1] - data["Adj Close"][0], 2)}\nPercent Change: {round(((data["Adj Close"][-1] / data["Adj Close"][0])-1)*100, 2)}%'
 
-    data["Adj Close"].plot(title=f"{msg_split[1].upper()}, {model.period} {str_interval}").get_figure().savefig("tmp.png")
+    data["Adj Close"].plot(
+        title=f"{msg_split[1].upper()}, {model.period} {str_interval}"
+    ).get_figure().savefig("tmp.png")
     logger.debug("chart created")
-    bot.post(text=replymsg, attachments=[Images(client.session).from_file(open("tmp.png", "rb"))])
+    bot.post(
+        text=replymsg,
+        attachments=[Images(client.session).from_file(open("tmp.png", "rb"))],
+    )
     logger.info("bot posted chart")
     os.remove("tmp.png")
     plt.clf()

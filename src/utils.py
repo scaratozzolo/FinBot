@@ -6,6 +6,7 @@ from src.config import config
 
 client = Client.from_token(config.groupme_access_token)
 
+
 def get_bot() -> Bot:
     # TODO probably find a better way to do this, like use bot id
     bot_manger = Bots(client.session)
@@ -16,7 +17,9 @@ def get_bot() -> Bot:
             bot = i
             break
     if bot is None:
-        bot = bot_manger.create(config.botname, group_id=config.group_id, callback_url=config.callback_url)
+        bot = bot_manger.create(
+            config.botname, group_id=config.group_id, callback_url=config.callback_url
+        )
         logger.debug("bot created")
 
     logger.info(bot)
@@ -25,7 +28,6 @@ def get_bot() -> Bot:
 
 
 def get_group_name() -> str:
-
     group_name = None
     groups = list(client.groups.list_all())
     for group in groups:
@@ -36,6 +38,6 @@ def get_group_name() -> str:
 
     return group_name
 
-def get_finnhub_client() -> finnhub.Client:
 
+def get_finnhub_client() -> finnhub.Client:
     return finnhub.Client(api_key=config.finnhub_api_key)
