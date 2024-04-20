@@ -33,14 +33,14 @@ async def financialadvisors(request: GroupMeCallback):
         logger.debug(f"{msg=}")
 
         if msg == "":
-            return "no message text"
+            return {"status": "no message text"}
 
         time.sleep(2)
 
         try:
             if msg == Commands.HELP.value.command:
                 logger.debug("calling help_msg")
-                help_msg(bot, Commands)
+                help_msg(bot)
 
             elif len(re.findall(r"\$\^?[a-zA-Z.]+", msg)) > 0:
                 logger.debug("calling get_quote")
