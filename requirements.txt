@@ -6,5 +6,6 @@ yfinance
 scipy
 finnhub-python
 matplotlib
-GroupyAPI
 loguru
+uvicorn
+gunicorn
