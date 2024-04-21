@@ -22,11 +22,17 @@ async def lifespan(app: FastAPI):
     scheduler.start()
     yield
 
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    scheduler.start()
+    yield
+
 app = FastAPI(
     title=bot.name,
     summary="GroupMe bot to keep you up to date on finance.",
     version=config.version,
     lifespan=lifespan,
+    root_path="/finbot",
 )
 
 app.add_middleware(
