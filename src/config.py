@@ -5,6 +5,8 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Config(BaseSettings):
     version: str = "2.0.0"
 
+    request_token: str
+
     groupme_access_token: str
 
     bot_id: typing.Optional[str] = None

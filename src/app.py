@@ -1,11 +1,11 @@
 import re
 import random
 from contextlib import asynccontextmanager
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from loguru import logger
 from src.config import config
-from src.utils import bot
+from src.utils import bot, check_query_token
 from src.models import GroupMeCallback, Commands
 from src.constants import Greetings, FailureReasons
 from src.commands.help import help_msg
@@ -38,10 +38,9 @@ app.add_middleware(
 )
 
 
-@app.post("/financialadvisors")
-async def financialadvisors(request: GroupMeCallback, token: str):
+@app.post("/financialadvisors", dependencies=[Depends(check_query_token)])
+async def financialadvisors(request: GroupMeCallback):
     logger.info(f"{request=}")
-    logger.warning(f"{token=}")
 
     if request.sender_type != "bot":
         msg = request.text
