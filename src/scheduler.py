@@ -21,7 +21,7 @@ def check_swings():
 
     market_status = finnhub_client.market_status(exchange='US')
 
-    if not market_status['isOpen']:
+    if market_status['isOpen']:
         logger.debug("market is open")
         for ticker in watchlist:
             quote = finnhub_client.quote(ticker)
@@ -40,7 +40,7 @@ def check_swings():
             for i in to_send:
                 todays_alerts[i] = datetime.now()
 
-    if market_status['isOpen']:
+    if not market_status['isOpen']:
         logger.debug("market is closed")
         todays_alerts = {}
 
