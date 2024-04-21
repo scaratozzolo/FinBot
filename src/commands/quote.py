@@ -1,10 +1,10 @@
 import re
 from datetime import datetime
 from zoneinfo import ZoneInfo
-import pandas as pd
 import yfinance as yf
 from loguru import logger
 from src.utils import bot, finnhub_client
+import emoji
 
 
 def get_quote(msg):
@@ -26,11 +26,10 @@ def get_quote(msg):
                 except Exception as excp:
                     logger.error(excp)
                     ticker_name = ticker
-                replymsg = f"{ticker_name} Quote:\nPrice: ${quote['c']}\nDollar Change: {round(quote['pc']-quote['c'], 2)}\n% Change: {quote['dp']}%"
+                replymsg = emoji.emojize(f"{ticker_name} Quote {':chart_increasing:' if quote['dp'] > 0 else ':chart_decreasing:'}\nPrice: ${quote['c']}\nDollar Change: {quote['d']}\n% Change: {quote['dp']}%", language='alias')
                 if 't' in quote:
                     dt = datetime.fromtimestamp(quote['t'], tz=ZoneInfo('UTC'))
-                    replymsg += f"\nAs of: {dt.astimezone(ZoneInfo('America/New_York')).strftime('%B %d, %Y %I:%M %p')}"
-                logger.info(replymsg)
+                    replymsg += f"\nAs of {dt.astimezone(ZoneInfo('America/New_York')).strftime('%B %d, %Y %I:%M %p')}"
                 bot.post(replymsg)
                 logger.debug(f"bot posted quote for {ticker}")
             except Exception as e:

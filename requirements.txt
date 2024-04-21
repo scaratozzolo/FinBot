@@ -10,3 +10,4 @@ loguru
 uvicorn
 gunicorn
 apscheduler
+emoji
