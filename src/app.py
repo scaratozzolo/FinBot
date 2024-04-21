@@ -1,5 +1,6 @@
 import re
 import random
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from loguru import logger
@@ -14,8 +15,12 @@ from src.commands.news import get_news
 from src.commands.monte_carlo import monte_carlo
 from src.commands.stats import calc_stats
 from src.commands.portfolio_opt import portfolio_opt
-from src.scheduler import lifespan
+from src.scheduler import scheduler
 
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    scheduler.start()
+    yield
 
 app = FastAPI(
     title=bot.name,
@@ -40,7 +45,6 @@ async def financialadvisors(request: GroupMeCallback):
     if request.sender_type != "bot":
         msg = request.text
         msg_split = msg.split()
-        logger.debug(f"{msg=}")
 
         if msg == "":
             return {"status": "no message text"}
