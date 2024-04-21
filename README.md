@@ -26,6 +26,9 @@ Here is an example `.env` file. These values can also be set through environment
 ```
 # Bot settings
 
+# Token to send during request to make sure request is authorized
+REQUEST_TOKEN = "<secret_token>"
+
 # Access token from GroupMe
 GROUPME_ACCESS_TOKEN = "<token>"  
 

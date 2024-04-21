@@ -1,4 +1,5 @@
 from loguru import logger
+from fastapi import HTTPException
 from groupy.client import Client
 from groupy.api.bots import Bots, Bot
 import finnhub
@@ -29,4 +30,10 @@ def get_finnhub_client() -> finnhub.Client:
     return finnhub.Client(api_key=config.finnhub_api_key)
 
 
+async def check_query_token(token: str):
+    if token != config.request_token:
+        raise HTTPException(status_code=400, detail="Incorrect token provided")
+
+
 bot = get_bot()
+finnhub_client = get_finnhub_client()

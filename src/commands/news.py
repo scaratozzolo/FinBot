@@ -1,10 +1,8 @@
 from datetime import date
 from loguru import logger
-from src.utils import get_finnhub_client
+from src.utils import finnhub_client
 from src.models import Commands
 from src.utils import bot
-
-fh_client = get_finnhub_client()
 
 
 def get_news(msg):
@@ -32,11 +30,11 @@ def get_news(msg):
             ticker = msg_split[1]
 
         if ticker is not None:
-            res = fh_client.company_news(
+            res = finnhub_client.company_news(
                 ticker, _from=str(date.today()), to=str(date.today())
             )
         else:
-            res = fh_client.general_news("general")
+            res = finnhub_client.general_news("general")
 
         bot.post(f"Total articles found: {len(res)}")
 

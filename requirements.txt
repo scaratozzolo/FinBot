@@ -9,3 +9,5 @@ matplotlib
 loguru
 uvicorn
 gunicorn
+apscheduler
+emoji
