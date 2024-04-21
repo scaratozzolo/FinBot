@@ -35,7 +35,7 @@ def check_swings():
         to_send = [f"${i}" for i in swings if f"${i}" not in todays_alerts]
         logger.debug(f"{to_send=}")
         if len(to_send) > 0:
-            bot.post(emoji.emojize(":police_car_light: Large Move Alert :police_car_light:"))
+            bot.post(emoji.emojize(":police_car_light: Swing Alert :police_car_light:"))
             get_quote(" ".join(to_send))
             for i in to_send:
                 todays_alerts[i] = datetime.now()
