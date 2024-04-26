@@ -1,0 +1,1 @@
+watchlist = ["BTC-USD", "LTC-USD", "NVDA", "SPY", "QQQ", "RIOT", "MCD", "LLY"]
