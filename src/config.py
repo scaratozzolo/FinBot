@@ -22,6 +22,8 @@ class Config(BaseSettings):
     alpaca_api_key: typing.Optional[str] = None
     alpaca_api_secret_key: typing.Optional[str] = None
 
+    mongodb_conn: typing.Optional[str]
+
     model_config = SettingsConfigDict(env_file=".env")
 
 
