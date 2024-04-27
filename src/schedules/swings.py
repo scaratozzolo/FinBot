@@ -4,12 +4,13 @@ import emoji
 from loguru import logger
 from src.commands.quote import get_quote
 from src.utils import bot, finnhub_client
-from src.watchlist import watchlist
+from src.watchlist import get_watchlist
 
 
 MARKET_OPEN = time(hour=9, minute=30, tzinfo=ZoneInfo("America/New_York"))
 MARKET_CLOSE = time(hour=16, tzinfo=ZoneInfo("America/New_York"))
 
+watchlist = get_watchlist()
 todays_alerts = {}
 
 def check_swings():

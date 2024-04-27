@@ -15,6 +15,7 @@ from src.commands.news import get_news
 from src.commands.monte_carlo import monte_carlo
 from src.commands.stats import calc_stats
 from src.commands.portfolio_opt import portfolio_opt
+from src.commands.watchlist import handle_watchlist
 from src.scheduler import scheduler
 
 @asynccontextmanager
@@ -86,6 +87,10 @@ async def financialadvisors(request: GroupMeCallback):
             elif msg_split[0] == Commands.PO.value.command:
                 logger.debug("calling port opt")
                 portfolio_opt(msg)
+
+            elif msg_split[0] == Commands.WATCHLIST.value.command:
+                logger.debug("calling handle_watchlist")
+                handle_watchlist(msg, {'user_id': request.user_id, "user_name": request.name})
 
         except Exception as e:
             logger.exception(e)
