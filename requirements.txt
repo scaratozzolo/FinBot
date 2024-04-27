@@ -11,3 +11,4 @@ uvicorn
 gunicorn
 apscheduler
 emoji
+pymongo
