@@ -5,42 +5,49 @@ from loguru import logger
 from src.commands.quote import get_quote
 from src.utils import bot, finnhub_client
 from src.watchlist import get_watchlist
+from src.db import mongo_db
 
 
 MARKET_OPEN = time(hour=9, minute=30, tzinfo=ZoneInfo("America/New_York"))
 MARKET_CLOSE = time(hour=16, tzinfo=ZoneInfo("America/New_York"))
 
 watchlist = get_watchlist()
-todays_alerts = {}
 
 def check_swings():
     logger.info("Checking swings...")
-    global todays_alerts
+    todays_alerts = mongo_db['swing_alerts']
     swings = []
 
     market_status = finnhub_client.market_status(exchange='US')
 
-    if market_status['isOpen']:
+    if not market_status['isOpen']:
         logger.debug("market is open")
         for ticker in watchlist:
             quote = finnhub_client.quote(ticker)
             if quote['dp'] is None:
                 logger.warning(f"Ticker not found: {ticker=}")
+                continue
+
+            result = todays_alerts.find_one({"ticker": ticker})
             
-            if abs(quote['dp']) > 1:
+            if result is None and abs(quote['dp'] > 1):
                 logger.debug(f"{ticker=}, {quote['dp']=}")
-                swings.append(ticker)
+                swings.append({"ticker":ticker, "percent":quote['dp']})
+            elif result is not None and abs(quote['dp']-result['percent']) > 1:
+                logger.debug(f"{ticker=}, {quote['dp']=}")
+                swings.append({"ticker":ticker, "percent":quote['dp']})
 
-        to_send = [f"${i}" for i in swings if f"${i}" not in todays_alerts]
-        logger.debug(f"{to_send=}")
-        if len(to_send) > 0:
+        logger.debug(f"{swings=}")
+        if len(swings) > 0:
             bot.post(emoji.emojize(":police_car_light: Swing Alert :police_car_light:"))
-            get_quote(" ".join(to_send))
-            for i in to_send:
-                todays_alerts[i] = datetime.now()
+            for i in swings:
+                get_quote(i['ticker'])
+                result = todays_alerts.insert_one({"ticker": i['ticker'], "alert_time": datetime.now(ZoneInfo("America/New_York")), "percent": i['percent']})
+                logger.debug(f"{result}")
 
-    if not market_status['isOpen']:
+    if market_status['isOpen']:
         logger.debug("market is closed")
-        todays_alerts = {}
+        result = todays_alerts.delete_many({})
+        logger.debug(f"{result}")
 
     logger.debug(f"{todays_alerts=}")
