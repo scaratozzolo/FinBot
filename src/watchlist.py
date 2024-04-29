@@ -20,7 +20,13 @@ def add_watchlist(ticker, user_info):
         }
     )
 
-    logger.debug(f"{result}")
+    if not ticker_exists:
+        result = watchlist_collection.insert_one({
+            'ticker':ticker,
+            'user_info': user_info,
+        })
+
+        logger.debug(f"{result}")
 
 
 def remove_watchlist(ticker):
