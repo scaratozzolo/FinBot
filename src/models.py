@@ -72,5 +72,5 @@ class Commands(Enum):
     WATCHLIST = Command(
         command=f"{config.bot_char}watch",
         description="A watchlist of tickers for the group.",
-        usage=f"{config.bot_char}watch add/remove ticker"
+        usage=f"{config.bot_char}watch add/remove ticker",
     )

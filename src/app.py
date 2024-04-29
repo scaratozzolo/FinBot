@@ -18,10 +18,12 @@ from src.commands.portfolio_opt import portfolio_opt
 from src.commands.watchlist import handle_watchlist
 from src.scheduler import scheduler
 
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     scheduler.start()
     yield
+
 
 app = FastAPI(
     title=bot.name,
@@ -90,7 +92,9 @@ async def financialadvisors(request: GroupMeCallback):
 
             elif msg_split[0] == Commands.WATCHLIST.value.command:
                 logger.debug("calling handle_watchlist")
-                handle_watchlist(msg, {'user_id': request.user_id, "user_name": request.name})
+                handle_watchlist(
+                    msg, {"user_id": request.user_id, "user_name": request.name}
+                )
 
         except Exception as e:
             logger.exception(e)

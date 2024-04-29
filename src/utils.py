@@ -17,7 +17,7 @@ def get_bot() -> Bot:
         if i.bot_id == config.bot_id:
             bot = i
             break
-    
+
     if not bot:
         logger.error(f"Bot with {config.bot_id=} could not be found.")
         return
@@ -25,6 +25,7 @@ def get_bot() -> Bot:
     logger.info(bot)
 
     return bot
+
 
 def get_finnhub_client() -> finnhub.Client:
     return finnhub.Client(api_key=config.finnhub_api_key)
