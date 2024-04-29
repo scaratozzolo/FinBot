@@ -18,7 +18,7 @@ def get_quote(msg):
         for ticker in tickers:
             try:
                 quote = finnhub_client.quote(ticker)
-                if quote['dp'] is None:
+                if quote["dp"] is None:
                     raise ValueError(f"Ticker not found: {ticker=}")
                 try:
                     yf_ticker = yf.Ticker(ticker).info
@@ -26,9 +26,12 @@ def get_quote(msg):
                 except Exception as excp:
                     logger.error(excp)
                     ticker_name = ticker
-                replymsg = emoji.emojize(f"{ticker_name} Quote {':chart_increasing:' if quote['dp'] > 0 else ':chart_decreasing:'}\nPrice: ${quote['c']}\nDollar Change: {quote['d']}\n% Change: {quote['dp']}%", language='alias')
-                if 't' in quote:
-                    dt = datetime.fromtimestamp(quote['t'], tz=ZoneInfo('UTC'))
+                replymsg = emoji.emojize(
+                    f"{ticker_name} Quote {':chart_increasing:' if quote['dp'] > 0 else ':chart_decreasing:'}\nPrice: ${quote['c']}\nDollar Change: {quote['d']}\n% Change: {quote['dp']}%",
+                    language="alias",
+                )
+                if "t" in quote:
+                    dt = datetime.fromtimestamp(quote["t"], tz=ZoneInfo("UTC"))
                     replymsg += f"\nAs of {dt.astimezone(ZoneInfo('America/New_York')).strftime('%B %d, %Y %I:%M %p')}"
                 bot.post(replymsg)
                 logger.debug(f"bot posted quote for {ticker}")
