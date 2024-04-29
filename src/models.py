@@ -68,3 +68,9 @@ class Commands(Enum):
         description="Calculates daily historical statistics over a given time range.",
         usage=f"{config.bot_char}stats ticker period interval\nExample: {config.bot_char}stats AAPL 3 y\nAvailable intervals: {', '.join(i.value for i in Intervals)}.",
     )
+
+    WATCHLIST = Command(
+        command=f"{config.bot_char}watch",
+        description="A watchlist of tickers for the group.",
+        usage=f"{config.bot_char}watch add/remove ticker"
+    )
