@@ -21,7 +21,7 @@ def check_swings():
 
     swing_alert_sent = False
 
-    if not market_status['isOpen']:
+    if market_status['isOpen']:
         logger.debug("market is open")
         for ticker in watchlist:
             quote = finnhub_client.quote(ticker)
@@ -37,10 +37,10 @@ def check_swings():
                     bot.post(emoji.emojize(":police_car_light: Swing Alert :police_car_light:"))
                     swing_alert_sent = True
                 get_quote("$" + ticker)
-                result = todays_alerts.update_one({"ticker": ticker}, {"alert_time": datetime.now(ZoneInfo("America/New_York")), "percent": quote['dp']}, upsert=True)
+                result = todays_alerts.update_one({"ticker": ticker}, {"$set": {"alert_time": datetime.now(ZoneInfo("America/New_York")), "percent": quote['dp']}}, upsert=True)
                 logger.debug(f"{result}")
 
-    if market_status['isOpen']:
+    if not market_status['isOpen']:
         logger.debug("market is closed")
         result = todays_alerts.delete_many({})
         logger.debug(f"{result}")
