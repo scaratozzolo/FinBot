@@ -6,7 +6,6 @@ from src.utils import bot
 
 
 def handle_watchlist(msg, user_info):
-
     msg_split = msg.split()
     logger.debug(f"{msg_split}")
     if len(msg_split) == 1:
