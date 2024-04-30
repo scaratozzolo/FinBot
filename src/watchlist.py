@@ -7,7 +7,7 @@ watchlist = ["BTC-USD", "LTC-USD", "NVDA", "SPY", "QQQ", "RIOT", "MCD", "LLY"]
 
 
 def get_watchlist():
-    result = watchlist_collection.find()
+    result = watchlist_collection.find().sort("ticker")
 
     return [i["ticker"] for i in result]
 
