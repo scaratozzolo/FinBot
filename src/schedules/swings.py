@@ -32,8 +32,8 @@ def check_swings():
 
             result = todays_alerts.find_one({"ticker": ticker})
             logger.debug(f"{ticker=}, {quote['dp']=}, {result=}")
-            if (result is None and abs(quote["dp"]) > 2) or (
-                result is not None and abs(quote["dp"] - result["percent"]) > 1.5
+            if (result is None and abs(quote["dp"]) > 3) or (
+                result is not None and abs(quote["dp"] - result["percent"]) > 2.5
             ):
                 logger.info(f"swing true for {ticker}")
                 if not swing_alert_sent:
