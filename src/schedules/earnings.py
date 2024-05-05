@@ -3,7 +3,7 @@ from zoneinfo import ZoneInfo
 import emoji
 from loguru import logger
 from src.utils import bot, finnhub_client
-from src.watchlist import watchlist
+from src.watchlist import get_watchlist
 
 
 def get_upcoming_earnings():
@@ -18,23 +18,22 @@ def get_upcoming_earnings():
     msg = emoji.emojize("Upcoming Earnings :calendar:\n\n")
     earnings_cal = {}
     send_message = False
-    for ticker in watchlist:
+    for ticker in get_watchlist():
         cal = finnhub_client.earnings_calendar(
             _from=from_date_str, to=to_date_str, symbol=ticker
         )["earningsCalendar"]
         if cal != []:
-            logger.debug(f"{ticker} has earnings")
+            logger.info(f"{ticker} has upcoming earnings")
             send_message = True
             earnings_date = datetime.strptime(cal[0]["date"], "%Y-%m-%d")
             logger.debug(f"{ticker} {earnings_date=}")
-            # Looks like data being returned in inaccurate
-            # if cal[0]["hour"] == "amc":
-            #     when = "After Market Close"
-            # elif cal[0]["hour"] == "bmo":
-            #     when = "Before Market Open"
-            # else:
-            #     when = ""
-            when = ""
+
+            if cal[0]["hour"] == "amc":
+                when = "After Market Close"
+            elif cal[0]["hour"] == "bmo":
+                when = "Before Market Open"
+            else:
+                when = ""
             logger.debug(f"{ticker} {when=}")
 
             ticker_msg = ticker + "\n"

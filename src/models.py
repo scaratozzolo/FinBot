@@ -74,3 +74,9 @@ class Commands(Enum):
         description="A watchlist of tickers for the group.",
         usage=f"{config.bot_char}watch add/remove ticker",
     )
+
+    EARNINGS = Command(
+        command=f"{config.bot_char}earnings",
+        description="Retuns earnings dates for tickers in watchlist for the next 7 days.",
+        usage=f"{config.bot_char}earnings",
+    )
