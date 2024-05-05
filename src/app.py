@@ -17,6 +17,7 @@ from src.commands.stats import calc_stats
 from src.commands.portfolio_opt import portfolio_opt
 from src.commands.watchlist import handle_watchlist
 from src.scheduler import scheduler
+from src.schedules.earnings import get_upcoming_earnings
 
 
 @asynccontextmanager
@@ -95,6 +96,10 @@ async def financialadvisors(request: GroupMeCallback):
                 handle_watchlist(
                     msg, {"user_id": request.user_id, "user_name": request.name}
                 )
+            elif msg_split[0] == Commands.EARNINGS.value.command:
+                logger.debug("calling get_upcoming_earnings")
+                get_upcoming_earnings()
+
 
         except Exception as e:
             logger.exception(e)

@@ -3,8 +3,6 @@ from src.db import mongo_db
 
 
 watchlist_collection = mongo_db["watchlist"]
-watchlist = ["BTC-USD", "LTC-USD", "NVDA", "SPY", "QQQ", "RIOT", "MCD", "LLY"]
-
 
 def get_watchlist():
     result = watchlist_collection.find().sort("ticker")
