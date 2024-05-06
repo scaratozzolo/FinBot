@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 import emoji
+import yfinance as yf
 from loguru import logger
 from src.utils import bot, finnhub_client
 from src.watchlist import get_watchlist
@@ -36,8 +37,15 @@ def get_upcoming_earnings():
                 when = ""
             logger.debug(f"{ticker} {when=}")
 
-            ticker_msg = ticker + "\n"
-            ticker_msg += f"{earnings_date.strftime('%B %d, %Y')} {when}\n\n"
+            try:
+                yf_ticker = yf.Ticker(ticker).info
+                ticker_name = yf_ticker["shortName"]
+                ticker_msg = f"{ticker_name} ({ticker})" + "\n"
+            except Exception as excp:
+                logger.warning(excp)
+                ticker_msg = ticker + "\n"
+            
+            ticker_msg += f"{earnings_date.strftime('%A, %B %d')} {when}\n\n"
 
             earnings_cal[ticker] = {"date": earnings_date, "msg": ticker_msg}
 
