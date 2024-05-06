@@ -1,5 +1,5 @@
 import re
-from datetime import datetime
+from datetime import datetime, date, timedelta
 from zoneinfo import ZoneInfo
 import yfinance as yf
 from loguru import logger
@@ -17,7 +17,7 @@ def get_quote(msg):
 
         for ticker in tickers:
             try:
-                quote = finnhub_client.quote(ticker)
+                quote = pull_data(ticker)
                 if quote["dp"] is None:
                     raise ValueError(f"Ticker not found: {ticker=}")
                 try:
@@ -42,3 +42,27 @@ def get_quote(msg):
         logger.debug("get_quote finished")
     except Exception as e:
         logger.exception(e)
+
+
+def pull_data(ticker):
+
+    finn_quote = finnhub_client.quote(ticker)
+    if finn_quote["dp"] is None:
+        logger.warning(f"finnhub quote for {ticker} is None")
+        data = yf.download(ticker, start=date.today() - timedelta(days=7))["Adj Close"]
+        quote = data.iloc[-1].round(2)
+        logger.debug(f"{quote=}")
+        pchange = (data.pct_change().dropna().iloc[-1] * 100).round(2)
+        logger.debug(f"{pchange=}")
+        dchange = (data.iloc[-1] - data.iloc[-2]).round(2)
+        logger.debug(f"{dchange=}")
+
+        parsed_quote = {
+            "c": quote,
+            "dp": pchange,
+            "d": dchange,
+        }
+
+        return parsed_quote
+    else:
+        return finn_quote

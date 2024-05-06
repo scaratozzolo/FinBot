@@ -3,7 +3,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Config(BaseSettings):
-    version: str = "2.4.0"
+    version: str = "2.4.1"
 
     request_token: str
 
