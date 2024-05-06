@@ -45,7 +45,7 @@ def get_upcoming_earnings():
                 logger.warning(excp)
                 ticker_msg = ticker + "\n"
             
-            ticker_msg += f"{earnings_date.strftime('%B %d, %Y')} {when}\n\n"
+            ticker_msg += f"{earnings_date.strftime('%A, %B %d')} {when}\n\n"
 
             earnings_cal[ticker] = {"date": earnings_date, "msg": ticker_msg}
 
