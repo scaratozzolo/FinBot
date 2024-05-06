@@ -28,7 +28,7 @@ def handle_watchlist(msg, user_info):
                 ticker_name = yf_ticker["shortName"]
                 bot.post(emoji.emojize(f":plus: {ticker_name} ({ticker}) added to watchlist."))
             except Exception as excp:
-                logger.error(excp)
+                logger.warning(excp)
                 bot.post(emoji.emojize(f":plus: {ticker} added to watchlist."))
 
         elif msg_split[1].lower() == "remove":
