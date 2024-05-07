@@ -18,6 +18,7 @@ from src.commands.portfolio_opt import portfolio_opt
 from src.commands.watchlist import handle_watchlist
 from src.scheduler import scheduler
 from src.schedules.earnings import get_upcoming_earnings
+from src.cipher import cipher_router
 
 
 @asynccontextmanager
@@ -40,6 +41,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.include_router(cipher_router)
 
 
 @app.post("/financialadvisors", dependencies=[Depends(check_query_token)])
