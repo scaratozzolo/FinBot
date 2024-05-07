@@ -18,6 +18,10 @@ def clean_string(msg):
     msg = msg.replace(" ", "")
     msg = msg.strip()
 
+    for i in msg:
+        if i not in letters:
+            msg = msg.replace(i, "")
+
     return msg
 
 
