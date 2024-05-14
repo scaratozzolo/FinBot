@@ -11,10 +11,11 @@ from src.db import mongo_db
 MARKET_OPEN = time(hour=9, minute=30, tzinfo=ZoneInfo("America/New_York"))
 MARKET_CLOSE = time(hour=16, tzinfo=ZoneInfo("America/New_York"))
 
-watchlist = get_watchlist()
-
 
 def check_swings():
+
+    watchlist = get_watchlist()
+
     logger.info("Checking swings...")
     todays_alerts = mongo_db["swing_alerts"]
 
