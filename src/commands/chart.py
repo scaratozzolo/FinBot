@@ -3,6 +3,7 @@ from datetime import date, timedelta
 from loguru import logger
 import yfinance as yf
 import matplotlib.pyplot as plt
+import mplfinance as mpf
 from groupy.api.attachments import Images
 from pydantic import BaseModel, ValidationError
 from src.models import Commands
@@ -68,11 +69,18 @@ def create_chart(msg):
         logger.error(excp)
         ticker_name = model.ticker
 
-    replymsg = f'{ticker_name}\nDollar Change: {round(data["Adj Close"][-1] - data["Adj Close"][0], 2)}\nPercent Change: {round(((data["Adj Close"][-1] / data["Adj Close"][0])-1)*100, 2)}%'
+    replymsg = f'{ticker_name}\nDollar Change: {round(data["Adj Close"].iloc[-1] - data["Adj Close"].iloc[0], 2)}\nPercent Change: {round(((data["Adj Close"].iloc[-1] / data["Adj Close"].iloc[0])-1)*100, 2)}%'
 
-    data["Adj Close"].plot(
-        title=f"{msg_split[1].upper()}, {model.period} {str_interval}"
-    ).get_figure().savefig("tmp.png")
+    mpf.plot(
+        data,
+        type="line",
+        title=f"{msg_split[1].upper()}, {model.period} {str_interval}",
+        savefig=dict(fname="tmp.png", dpi=100, pad_inches=0.25),
+        volume=True,
+        mav=(20, 50),
+        style="yahoo",
+        tight_layout=True,
+    )
     logger.debug("chart created")
     bot.post(
         text=replymsg,
