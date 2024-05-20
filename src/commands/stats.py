@@ -7,7 +7,7 @@ import yfinance as yf
 import matplotlib.pyplot as plt
 from groupy.api.attachments import Images
 from loguru import logger
-from src.utils import bot, client
+from src.utils import bot, client, finnhub_client
 
 
 class StatsModel(BaseModel):
@@ -63,12 +63,21 @@ def calc_stats(msg):
     vol = round(returns.std(), 2)
     var95 = round(returns.quantile(0.05), 2)
     cvar95 = round(returns[returns.lt(var95)].mean(), 2)
+    beta = round(float(finnhub_client.company_basic_financials(model.ticker, 'all')['metric']['beta']), 2)
+    sharpe_ratio = round(mean/vol, 2)
     logger.debug("stats calculated")
 
-    replymsg = f"{model.ticker} Historical Statistics\nMean: {mean}%\nVol: {vol}%\nVaR 95%: {var95}%\nCVaR 95: {cvar95}%"
+    try:
+        yf_ticker = yf.Ticker(model.ticker).info
+        ticker_name = yf_ticker["shortName"]
+    except Exception as excp:
+        logger.error(excp)
+        ticker_name = model.ticker
+
+    replymsg = f"{ticker_name} Statistics\nMean:{mean: >17}%\nVol:{vol: >21}%\nSharpe:{sharpe_ratio: >15}\nBeta:{beta: >19}\nVaR 95%:{var95: >12}%\nCVaR 95:{cvar95: >12}%"
 
     returns.hist()
-    plt.title(f"{model.ticker} Returns Distribution, {model.period} {str_interval}")
+    plt.title(f"{model.ticker.upper()} Returns Distribution, {model.period} {str_interval}")
     plt.savefig("tmp.png")
     bot.post(
         text=replymsg,
