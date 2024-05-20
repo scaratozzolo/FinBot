@@ -12,3 +12,5 @@ gunicorn
 apscheduler
 emoji
 pymongo
+mplfinance
+
