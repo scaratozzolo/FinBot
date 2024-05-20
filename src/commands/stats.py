@@ -64,6 +64,7 @@ def calc_stats(msg):
     var95 = round(returns.quantile(0.05), 2)
     cvar95 = round(returns[returns.lt(var95)].mean(), 2)
     beta = round(float(finnhub_client.company_basic_financials(model.ticker, 'all')['metric']['beta']), 2)
+    sharpe_ratio = round(mean/vol, 2)
     logger.debug("stats calculated")
 
     try:
@@ -73,7 +74,7 @@ def calc_stats(msg):
         logger.error(excp)
         ticker_name = model.ticker
 
-    replymsg = f"{ticker_name} Statistics\nMean:{mean: >17}%\nVol:{vol: >21}%\nBeta:{beta: >19}\nVaR 95%:{var95: >12}%\nCVaR 95:{cvar95: >12}%"
+    replymsg = f"{ticker_name} Statistics\nMean:{mean: >17}%\nVol:{vol: >21}%\nSharpe:{sharpe_ratio: >15}\nBeta:{beta: >19}\nVaR 95%:{var95: >12}%\nCVaR 95:{cvar95: >12}%"
 
     returns.hist()
     plt.title(f"{model.ticker.upper()} Returns Distribution, {model.period} {str_interval}")
