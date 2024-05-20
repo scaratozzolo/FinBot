@@ -27,7 +27,7 @@ def get_quote(msg):
                     logger.error(excp)
                     ticker_name = ticker
                 replymsg = emoji.emojize(
-                    f"{ticker_name} Quote {':chart_increasing:' if quote['dp'] > 0 else ':chart_decreasing:'}\nPrice: ${quote['c']}\nDollar Change: {quote['d']}\n% Change: {quote['dp']}%",
+                    f"{ticker_name} Quote {':chart_increasing:' if quote['dp'] > 0 else ':chart_decreasing:'}\nPrice: {quote['c']: >28}\nDollar Change: {quote['d']: >12}\n% Change: {quote['dp']: >16}%",
                     language="alias",
                 )
                 if "t" in quote:
