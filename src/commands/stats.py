@@ -73,7 +73,7 @@ def calc_stats(msg):
         logger.error(excp)
         ticker_name = model.ticker
 
-    replymsg = f"{ticker_name} Historical Statistics\nMean:{mean: >17}%\nVol:{vol: >21}%\nBeta:{beta: >19}\nVaR 95%:{var95: >12}%\nCVaR 95:{cvar95: >11}%"
+    replymsg = f"{ticker_name} Statistics\nMean:{mean: >17}%\nVol:{vol: >21}%\nBeta:{beta: >19}\nVaR 95%:{var95: >12}%\nCVaR 95:{cvar95: >12}%"
 
     returns.hist()
     plt.title(f"{model.ticker.upper()} Returns Distribution, {model.period} {str_interval}")
