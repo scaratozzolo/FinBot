@@ -77,7 +77,7 @@ async def financialadvisors(request: GroupMeCallback):
 
             elif msg.lower().find("crypto check") > -1:
                 logger.debug("calling crypto check")
-                get_quote("$BTC-USD $ETH-USD $LTC-USD $DOGE-USD")
+                get_quote("$BTC-USD $ETH-USD $LTC-USD $DOGE-USD $SOL-USD")
 
             elif msg_split[0] == Commands.NEWS.value.command:
                 logger.debug("calling get_news")
