@@ -45,11 +45,13 @@ def get_quote(msg):
 
 
 def pull_data(ticker):
-
     finn_quote = finnhub_client.quote(ticker)
     if finn_quote["dp"] is None:
         logger.warning(f"finnhub quote for {ticker} is None")
-        data = yf.download(ticker, start=date.today() - timedelta(days=7))["Adj Close"]
+        data = yf.download(ticker, start=date.today() - timedelta(days=7), auto_adjust=False, multi_level_index=False)[
+            "Adj Close"
+        ]
+        logger.debug(f"{data=}")
         quote = data.iloc[-1].round(2)
         logger.debug(f"{quote=}")
         pchange = (data.pct_change().dropna().iloc[-1] * 100).round(2)
@@ -62,7 +64,7 @@ def pull_data(ticker):
             "dp": pchange,
             "d": dchange,
         }
-
+        logger.debug(f"{parsed_quote=}")
         return parsed_quote
     else:
         return finn_quote
