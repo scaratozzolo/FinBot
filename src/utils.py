@@ -38,3 +38,5 @@ async def check_query_token(token: str):
 
 bot = get_bot()
 finnhub_client = get_finnhub_client()
+
+bot.post(f"{bot.name} v{config.version} Running...")
