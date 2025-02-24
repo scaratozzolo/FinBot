@@ -17,27 +17,32 @@ def handle_watchlist(msg, user_info):
             reply_msg += f"{i}\n"
 
         bot.post(reply_msg)
-    elif len(msg_split) == 3:
-        ticker = msg_split[2].upper()
+    elif len(msg_split) == 2:
+        ticker = msg_split[-1].upper()
 
-        if msg_split[1].lower() == "add":
-            logger.info("adding to watchlist")
-            add_watchlist(ticker, user_info)
-            try:
-                yf_ticker = yf.Ticker(ticker).info
-                ticker_name = yf_ticker["shortName"]
+        try:
+            yf_ticker = yf.Ticker(ticker).info
+            ticker_name = yf_ticker["shortName"]
+        except Exception as excp:
+            logger.error(excp)
+            ticker_name = ticker
+
+        logger.info("adding to watchlist")
+        add_result = add_watchlist(ticker, user_info)
+        if add_result:
+            logger.info("added to watchlist")
+            if ticker_name != ticker:
                 bot.post(emoji.emojize(f":plus: {ticker_name} ({ticker}) added to watchlist."))
-            except Exception as excp:
-                logger.warning(excp)
+            else:
                 bot.post(emoji.emojize(f":plus: {ticker} added to watchlist."))
 
-        elif msg_split[1].lower() == "remove":
-            logger.info("removing from watchlist")
-            remove_watchlist(ticker)
-            bot.post(emoji.emojize(f":minus: {ticker} removed from watchlist."))
-
         else:
-            bot.post(Commands.WATCHLIST.value.usage)
+            logger.info("already in watchlist, removing from watchlist")
+            remove_watchlist(ticker)
+            if ticker_name != ticker:
+                bot.post(emoji.emojize(f":minus: {ticker_name} ({ticker}) removed from watchlist."))
+            else:
+                bot.post(emoji.emojize(f":minus: {ticker} removed from watchlist."))
 
     else:
         bot.post(Commands.WATCHLIST.value.usage)

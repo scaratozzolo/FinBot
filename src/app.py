@@ -77,7 +77,7 @@ async def financialadvisors(request: GroupMeCallback):
 
             elif msg.lower().find("crypto check") > -1:
                 logger.debug("calling crypto check")
-                get_quote("$BTC-USD $ETH-USD $LTC-USD $DOGE-USD $SOL-USD")
+                get_quote("$BTC-USD $ETH-USD $DOGE-USD $SOL-USD")
 
             elif msg_split[0] == Commands.NEWS.value.command:
                 logger.debug("calling get_news")
@@ -97,13 +97,10 @@ async def financialadvisors(request: GroupMeCallback):
 
             elif msg_split[0] == Commands.WATCHLIST.value.command:
                 logger.debug("calling handle_watchlist")
-                handle_watchlist(
-                    msg, {"user_id": request.user_id, "user_name": request.name}
-                )
+                handle_watchlist(msg, {"user_id": request.user_id, "user_name": request.name})
             elif msg_split[0] == Commands.EARNINGS.value.command:
                 logger.debug("calling get_upcoming_earnings")
                 get_upcoming_earnings()
-
 
         except Exception as e:
             logger.exception(e)

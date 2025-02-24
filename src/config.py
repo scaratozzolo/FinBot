@@ -1,9 +1,11 @@
 import typing
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+from src import __version__
+
 
 class Config(BaseSettings):
-    version: str = "2.5.0"
+    version: str = __version__
 
     request_token: str
 
